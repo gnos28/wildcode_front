@@ -1,0 +1,32 @@
+@import "../styles/variables.scss";
+
+.container {
+  background-color: $main-color-light;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+
+  h1,
+  h2 {
+    margin: 0;
+  }
+
+  h1 {
+  }
+
+  .header {
+    display: flex;
+    gap: 10px;
+    position: absolute;
+  }
+
+  .headerLeft {
+    left: 10px;
+  }
+
+  .headerRight {
+    right: 10px;
+  }
+}
