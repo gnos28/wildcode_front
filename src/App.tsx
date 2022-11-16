@@ -1,11 +1,18 @@
 import React from "react";
+import { Routes, Route } from "react-router-dom";
 import Header from "./components/Header";
+import Edit from "./pages/Edit";
+import Home from "./pages/Home";
 
 function App() {
   return (
-    <div className="App">
+    <>
       <Header />
-    </div>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/edit" element={<Edit />} />
+      </Routes>
+    </>
   );
 }
 

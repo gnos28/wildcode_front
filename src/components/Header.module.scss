@@ -1,19 +1,29 @@
 @import "../styles/variables.scss";
 
 .container {
-  background-color: $main-color-light;
+  background-color: $main-color-ultralight;
   padding: 10px;
   display: flex;
   align-items: center;
   justify-content: center;
   position: relative;
+  user-select: none;
 
   h1,
   h2 {
     margin: 0;
   }
 
-  h1 {
+  .middle {
+    display: flex;
+    img {
+      height: $header-height;
+      cursor: default;
+    }
+  }
+
+  img {
+    cursor: pointer;
   }
 
   .header {
