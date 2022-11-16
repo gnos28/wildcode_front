@@ -1,4 +1,10 @@
+@import "../styles/variables.scss";
+
 .layoutContainer {
-  padding: 10px;
-  max-width: 1200px;
+  background-color: $main-color-ultralight;
+  & > div {
+    max-width: 1200px;
+    min-height: calc(100vh - $header-height);
+    padding: 10px;
+  }
 }
