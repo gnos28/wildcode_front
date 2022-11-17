@@ -1,17 +1,21 @@
 import { createContext, useState, useMemo, ReactNode } from "react";
-// import { ExtProject } from "../interfaces";
+import { ExtProject } from "../interfaces";
 
-type ExtProject = {
-  name: string;
-};
-const initProject: ExtProject = {
-  name: "",
+const initProject: Partial<ExtProject> = {
+  id: undefined,
+  name: undefined,
+  owner: undefined,
+  description: undefined,
+  languages: [],
+  nb_like: undefined,
+  nb_views: undefined,
+  is_public: undefined,
 };
 
 type ProjectContextProviderProps = { children: ReactNode };
 type TypeContext = {
-  project: ExtProject;
-  setProject: (c: ExtProject) => void;
+  project: Partial<ExtProject>;
+  setProject: (c: Partial<ExtProject>) => void;
 };
 
 const ProjectContext = createContext<TypeContext>({
@@ -22,7 +26,7 @@ const ProjectContext = createContext<TypeContext>({
 export function ProjectContextProvider({
   children,
 }: ProjectContextProviderProps) {
-  const [project, setProject] = useState<ExtProject>(initProject);
+  const [project, setProject] = useState<Partial<ExtProject>>(initProject);
   const value = useMemo(
     () => ({
       project,
