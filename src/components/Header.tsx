@@ -1,31 +1,36 @@
-import React from "react";
+import React, { useContext } from "react";
 import { NavLink } from "react-router-dom";
 import styles from "./Header.module.scss";
+import ProjectContext from "../contexts/projectContext";
 
 const Header = () => {
+  const { project } = useContext(ProjectContext);
+
   return (
     <header className={styles.container}>
-      <div className={[styles.header, styles.headerLeft].join(" ")}>
-        <img
-          src="/list.svg"
-          alt="list"
-          draggable={false}
-          className={styles.img}
-        />
-        <h2>Titre du projet</h2>
-        <img
-          src="/people-group.svg"
-          alt="people-group"
-          draggable={false}
-          className={styles.img}
-        />
-        <img
-          src="/heart-empty.svg"
-          alt="heart-empty"
-          draggable={false}
-          className={styles.img}
-        />
-      </div>
+      {project.name && (
+        <div className={[styles.header, styles.headerLeft].join(" ")}>
+          <img
+            src="/list.svg"
+            alt="list"
+            draggable={false}
+            className={styles.img}
+          />
+          <h2>Titre du projet</h2>
+          <img
+            src="/people-group.svg"
+            alt="people-group"
+            draggable={false}
+            className={styles.img}
+          />
+          <img
+            src="/heart-empty.svg"
+            alt="heart-empty"
+            draggable={false}
+            className={styles.img}
+          />
+        </div>
+      )}
 
       <h1 className={styles.middle}>
         <img
