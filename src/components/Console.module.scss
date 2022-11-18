@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Ubuntu+Mono&display=swap");
+
 .container {
   display: flex;
   width: 100%;
@@ -5,6 +7,7 @@
   justify-content: flex-start;
   background-color: black;
   color: white;
-  font-size: 5px;
-  font-family: Monaco;
+  font-size: 32px;
+  font-family: "Ubuntu Mono", monospace;
+  padding-left: 16px;
 }

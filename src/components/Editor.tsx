@@ -1,9 +1,12 @@
 import React, { useEffect, useState, useRef } from "react";
 import style from "./Editor.module.scss";
-
 import Editor, { useMonaco } from "@monaco-editor/react";
 
-const Editeur = () => {
+type EditeurProps = {
+  sendMonaco: (code: string) => Promise<void>;
+};
+
+const Editeur = ({ sendMonaco }: EditeurProps) => {
   const [theme, setTheme] = useState<string>("light");
   const editor = document.getElementById("resize");
   // const [input, setInput] = useState<string>();
@@ -18,8 +21,12 @@ const Editeur = () => {
     editorRef.current = editor;
   }
 
-  const showValue = () => {
-    console.log(editorRef.current.getValue());
+  const execute = () => {
+    // console.log(editorRef.current.getValue());
+
+    const code = editorRef.current.getValue();
+
+    if (code) sendMonaco(code);
   };
 
   console.log("editor", editor);
@@ -33,7 +40,7 @@ const Editeur = () => {
     <div className="container">
       <button onClick={toggleTheme}>thème</button>
       <div className={style.resizable} id="resize">
-        <button onClick={showValue}>get code</button>
+        <button onClick={execute}>EXECUTE</button>
         <Editor
           height="50vh"
           defaultLanguage="javascript"
