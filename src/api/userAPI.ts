@@ -1,4 +1,4 @@
-import { api } from "./api";
+import { api } from "./_graphQL";
 import { IUser, CreateUser } from "../interfaces/IUser";
 import { gql } from "@apollo/client";
 
