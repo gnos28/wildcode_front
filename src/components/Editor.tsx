@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef } from "react";
 import style from "./Editor.module.scss";
 import Editor, { useMonaco } from "@monaco-editor/react";
 
@@ -8,7 +8,7 @@ type EditeurProps = {
 
 const Editeur = ({ sendMonaco }: EditeurProps) => {
   const [theme, setTheme] = useState<string>("light");
-  const editor = document.getElementById("resize");
+  // const editor = document.getElementById("resize");
   // const [input, setInput] = useState<string>();
   const editorRef = useRef<any>(null);
 
@@ -28,8 +28,6 @@ const Editeur = ({ sendMonaco }: EditeurProps) => {
 
     if (code) sendMonaco(code);
   };
-
-  console.log("editor", editor);
 
   useEffect(() => {
     // do conditional chaining
