@@ -5,8 +5,8 @@ type GetExecutedCode = {
   data: Required<any>[];
 };
 
-export const equipeAPI = {
-  execute: async (code: string): Promise<GetExecutedCode> => {
+export const executeCodeAPI = {
+  sendCode: async (code: string): Promise<GetExecutedCode> => {
     try {
       const { status, data }: GetExecutedCode = await api.post(`/executeCode`, {
         code,
