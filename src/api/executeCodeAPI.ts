@@ -1,15 +1,13 @@
 import { api } from "./_REST";
 
-type ExecutedCode = {
-  error: string[];
-  info: string[];
-  log: string[];
-  warn: string[];
+export type ExecutedCode = {
+  type: "log" | "info" | "warn" | "error";
+  message: string[];
 };
 
 type GetExecutedCode = {
   status: number;
-  data: ExecutedCode | undefined;
+  data: ExecutedCode[] | undefined;
 };
 
 export const executeCodeAPI = {
