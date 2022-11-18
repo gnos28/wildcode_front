@@ -7,7 +7,11 @@ type ConsoleProps = {
 
 const Console = ({ consoleResult }: ConsoleProps) => {
   return (
-    <div className={styles.container}>
+    <div
+      className={[styles.container, styles.scroll, styles["scroll-2"]].join(
+        " "
+      )}
+    >
       {consoleResult &&
         consoleResult.map((line, lineIndex) => (
           <p className={styles[line.type]} key={lineIndex}>
