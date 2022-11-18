@@ -6,5 +6,5 @@ if (process.env.BACKEND_URL) fromFrontUrl = process.env.BACKEND_URL;
 
 export const api = axios.create({
   baseURL: `${fromFrontUrl}/api`,
-  withCredentials: true,
+  // withCredentials: true,
 });

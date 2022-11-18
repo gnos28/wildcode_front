@@ -1,11 +1,23 @@
-import style from "./Console.module.scss";
-import React, { useState } from "react";
+import { ExecutedCode } from "../api/executeCodeAPI";
+import styles from "./Console.module.scss";
 
-const Console = () => {
-  const [returnConsole] = useState<string>(">console return here !!");
+type ConsoleProps = {
+  consoleResult: ExecutedCode[] | undefined;
+};
+
+const Console = ({ consoleResult }: ConsoleProps) => {
   return (
-    <div className={style.container}>
-      <h1 className="style.txt">{returnConsole} </h1>
+    <div
+      className={[styles.container, styles.scroll, styles["scroll-2"]].join(
+        " "
+      )}
+    >
+      {consoleResult &&
+        consoleResult.map((line, lineIndex) => (
+          <p className={styles[line.type]} key={lineIndex}>
+            {`>\u00a0` + line.message}
+          </p>
+        ))}
     </div>
   );
 };

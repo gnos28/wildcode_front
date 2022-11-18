@@ -1,11 +1,16 @@
-import React, { useEffect, useState, useRef } from "react";
-import style from "./Editor.module.scss";
-
+import { useEffect, useState, useRef } from "react";
+import styles from "./Editor.module.scss";
 import Editor, { useMonaco } from "@monaco-editor/react";
 
-const Editeur = () => {
-  const [theme, setTheme] = useState<string>("light");
-  const editor = document.getElementById("resize");
+type EditeurProps = {
+  sendMonaco: (code: string) => Promise<void>;
+};
+
+type Theme = "light" | "vs-dark";
+
+const Editeur = ({ sendMonaco }: EditeurProps) => {
+  const [theme, setTheme] = useState<Theme>("light");
+  // const editor = document.getElementById("resize");
   // const [input, setInput] = useState<string>();
   const editorRef = useRef<any>(null);
 
@@ -18,11 +23,13 @@ const Editeur = () => {
     editorRef.current = editor;
   }
 
-  const showValue = () => {
-    console.log(editorRef.current.getValue());
-  };
+  const execute = () => {
+    // console.log(editorRef.current.getValue());
 
-  console.log("editor", editor);
+    const code = editorRef.current.getValue();
+
+    if (code) sendMonaco(code);
+  };
 
   useEffect(() => {
     // do conditional chaining
@@ -30,10 +37,17 @@ const Editeur = () => {
   }, [monaco]);
 
   return (
-    <div className="container">
-      <button onClick={toggleTheme}>thème</button>
-      <div className={style.resizable} id="resize">
-        <button onClick={showValue}>get code</button>
+    <div className={styles.container}>
+      <div className={styles.topbar}>
+        <button onClick={execute}>
+          <img src="/start.svg" alt="execute code" draggable={false} />
+        </button>
+        <button onClick={toggleTheme}>
+          {theme === "light" ? "light mode" : "dark mode"}
+        </button>
+      </div>
+
+      <div className={styles.resizable} id="resize">
         <Editor
           height="50vh"
           defaultLanguage="javascript"
