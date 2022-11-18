@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Editor from "../components/Editor";
 import Console from "../components/Console";
 import { executeCodeAPI } from "../api/executeCodeAPI";
+import styles from "./Edit.module.scss";
 
 const Edit = () => {
   const [consoleResult, setConsoleResult] = useState<string>("");
@@ -15,9 +16,9 @@ const Edit = () => {
   };
 
   return (
-    <div>
-      Edit
+    <div className={styles.container}>
       <Editor sendMonaco={sendMonaco} />
+      <div></div>
       <Console consoleResult={consoleResult} />
     </div>
   );
