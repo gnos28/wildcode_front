@@ -4,6 +4,7 @@ import Layout from "./components/Layout";
 import { ProjectContextProvider } from "./contexts/projectContext";
 import Edit from "./pages/Edit";
 import Home from "./pages/Home";
+import SignIn from "./pages/SignIn";
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/edit" element={<Edit />} />
+          <Route path="/login" element={<SignIn />} />
         </Routes>
       </Layout>
     </ProjectContextProvider>

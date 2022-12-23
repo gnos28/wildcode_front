@@ -9,17 +9,14 @@ export const userAPI = {
         // mutation à refaire lorsque le back sera OP
         mutation: gql`
           mutation Mutation($user: iUser!) {
-            createUser(user: $user) {
+            createUser(password: $password, email: $email) {
               id
-              name
-              description
             }
           }
         `,
         variables: {
           user: {
             email: user.email,
-            login: user.login,
             password: user.password,
           },
         },

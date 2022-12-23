@@ -1,60 +1,52 @@
-import React, { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import styles from "./Home.module.scss";
 import { ExtProject } from "../interfaces";
 import ProjectItem from "../components/ProjectItem";
+import { useNavigate } from "react-router-dom";
+import { useApolloClient, gql, useQuery } from "@apollo/client";
 
 const Home = () => {
   const [myProjects, setMyProjects] = useState<ExtProject[]>();
   const [sharedProjects, setSharedProjects] = useState<ExtProject[]>();
-  // call API pour récupérer liste des projets du user
+  
+
+  const navigate = useNavigate();
+
+  const routeEdit = () => {
+    navigate("/Edit");
+  };
+
+  const token = localStorage.getItem("token");
 
   useEffect(() => {
-    setMyProjects([
-      {
-        id: 1,
-        name: "boloss",
-        owner: "Julien VIGNERON",
-        description: "lorem",
-        languages: ["javascript", "typescript"],
-        nb_like: 3,
-        nb_views: 12,
-        is_public: true,
-      },
-      {
-        id: 2,
-        name: "boloss2",
-        owner: "Julien VIGNERON",
-        description: "lorem",
-        languages: ["javascript"],
-        nb_like: 12,
-        nb_views: 122,
-        is_public: true,
-      },
-    ]);
+    if (!token) {
+      navigate("/login");
+    }
+  });
+  // call API pour récupérer liste des projets du user
 
-    setSharedProjects([
-      {
-        id: 1,
-        name: "boloss",
-        owner: "Julien VIGNERON",
-        description: "lorem",
-        languages: ["javascript"],
-        nb_like: 3,
-        nb_views: 12,
-        is_public: true,
-      },
-      {
-        id: 2,
-        name: "boloss2",
-        owner: "Julien VIGNERON",
-        description: "lorem",
-        languages: ["javascript"],
-        nb_like: 12,
-        nb_views: 122,
-        is_public: false,
-      },
-    ]);
-  }, []);
+  const GET_PROJECT = gql`
+    query {
+      getAllProjects {
+        description
+        id
+        id_storage_number
+        isPublic
+        name
+        nb_likes
+        nb_views
+      }
+    }
+  `;
+
+  const { loading, error } = useQuery(GET_PROJECT, {
+    onCompleted: (data: any) => {
+      setMyProjects(data.getAllProjects);
+    },
+  });
+
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error :</p>;
 
   return (
     <div>
@@ -72,13 +64,14 @@ const Home = () => {
           {myProjects?.map((project) => (
             <ProjectItem key={project.id} project={project} owned={true} />
           ))}
-          <article className={styles.newProject}>
+          <article className={styles.newProject} onClick={routeEdit}>
             <img src="/add-circle.svg" alt="add" className={styles.addIcon} />
             <span>new project</span>
           </article>
         </div>
       </section>
-      <section className={styles.section}>
+
+      {/* <section className={styles.section}>
         <h2>
           <img
             src="/triangle.svg"
@@ -92,7 +85,7 @@ const Home = () => {
             <ProjectItem key={project.id} project={project} owned={false} />
           ))}
         </div>
-      </section>
+      </section>  */}
     </div>
   );
 };

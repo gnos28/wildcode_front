@@ -28,13 +28,13 @@ const ProjectItem = ({ project, owned }: ProjectItemProps) => {
               <img src="/trash.svg" alt="delete" draggable={false} />
             </button>
           )}
-          <div className={styles.languagesContainer}>
+          {/* <div className={styles.languagesContainer}>
             {project.languages.map((lan) => (
               <div>
                 <img src={`/${lan}.svg`} alt={lan} draggable={false} />
               </div>
             ))}
-          </div>
+          </div> */}
         </div>
 
         <div className={styles.footer}>
