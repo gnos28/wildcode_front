@@ -12,6 +12,6 @@ CMD ["node", "src/index.js"]
 
 FROM base as dev
 ENV NODE_ENV=development
-RUN npm install
+RUN npm install --force
 COPY . /
 CMD ["react-scripts", "start"]
