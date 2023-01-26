@@ -1,9 +1,8 @@
-import React from "react";
-import { ExtProject } from "../interfaces";
+import { IProject } from "../interfaces/IProject";
 import styles from "./ProjectItem.module.scss";
 
 type ProjectItemProps = {
-  project: ExtProject;
+  project: IProject;
   owned?: boolean;
 };
 
@@ -38,7 +37,7 @@ const ProjectItem = ({ project, owned }: ProjectItemProps) => {
         </div>
 
         <div className={styles.footer}>
-          {owned === true || project.is_public === true ? (
+          {owned === true || project.isPublic === true ? (
             <button
               onClick={() => {}}
               className={[styles.button, styles.share].join(" ")}
@@ -56,7 +55,7 @@ const ProjectItem = ({ project, owned }: ProjectItemProps) => {
 
           <div>
             <img src="/heart-full.svg" alt="likes" draggable={false} />
-            {project.nb_like}
+            {project.nb_likes}
           </div>
         </div>
       </div>
