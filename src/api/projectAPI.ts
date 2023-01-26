@@ -46,7 +46,7 @@ export const projectAPI = {
     const projects = (
       await api.query({
         query: gql`
-          query {
+          query Query {
             getAllProjects {
               description
               id
@@ -55,9 +55,6 @@ export const projectAPI = {
               name
               nb_likes
               nb_views
-              file {
-                language
-              }
             }
           }
         `,
