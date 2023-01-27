@@ -19,6 +19,8 @@
     padding: 10px;
     display: flex;
     gap: 20px;
+    display: flex;
+    flex-wrap: wrap;
 
     .newProject {
       background-color: $main-color-ultralight;

@@ -13,6 +13,8 @@ const SignIn = () => {
     const token = await authAPI.getToken(userEmail, password);
 
     localStorage.setItem("token", token);
+
+    navigate("/")
   };
 
   useEffect(() => {

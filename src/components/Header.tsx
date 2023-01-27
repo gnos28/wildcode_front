@@ -10,12 +10,12 @@ const Header = () => {
   const client = useApolloClient();
   const navigate = useNavigate();
 
-  // const token = localStorage.getItem("token");
-  // useEffect(() => {
-  //   if (token) {
-  //     setIsAuth(true)
-  //   }
-  // }, [token]);
+  const token = localStorage.getItem("token");
+  useEffect(() => {
+    if (token) {
+      setIsAuth(true);
+    }
+  }, [token]);
 
   const signOut = () => {
     localStorage.setItem("token", "");

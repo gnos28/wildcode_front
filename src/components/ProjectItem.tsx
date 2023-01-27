@@ -1,5 +1,8 @@
+import { useNavigate } from "react-router-dom";
 import { IProject } from "../interfaces/IProject";
 import styles from "./ProjectItem.module.scss";
+import ProjectContext from "../contexts/projectContext";
+import { useContext } from "react";
 
 type ProjectItemProps = {
   project: IProject;
@@ -7,6 +10,15 @@ type ProjectItemProps = {
 };
 
 const ProjectItem = ({ project, owned }: ProjectItemProps) => {
+  const { setProject } = useContext(ProjectContext);
+
+  const navigate = useNavigate();
+  const handleOpenProject = () => {
+    setProject(project);
+
+    navigate("/Edit");
+  };
+
   return (
     <article className={styles.article}>
       <h3>{project.name}</h3>
@@ -14,7 +26,7 @@ const ProjectItem = ({ project, owned }: ProjectItemProps) => {
         <div className={styles.content}>
           <p>{project.description}</p>
           <button
-            onClick={() => {}}
+            onClick={handleOpenProject}
             className={[styles.button, styles.edit].join(" ")}
           >
             <img src="/pen.svg" alt="edit" draggable={false} />
