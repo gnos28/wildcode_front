@@ -1,0 +1,61 @@
+@import "../styles/variables.scss";
+
+.modal {
+  // width: 100%;
+  // height: 100%;
+  // background-color: red;
+  // z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.form {
+  background-color: #8fb7b7;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  width: 30%;
+  border-radius: 20px;
+  height: 30%;
+}
+
+.input {
+  display: flex;
+  flex-direction: column;
+  margin-top: 1%;
+  display: flex;
+  align-items: center;
+  align-content: center;
+  text-align: center;
+}
+
+.button {
+  color: white;
+  margin-top: 2vh;
+}
+
+.connection {
+  margin-top: 25%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100vw;
+}
+
+.inputCo {
+  margin-top: 10px;
+  margin-left: 10px;
+  margin-right: 10px;
+  text-align: center;
+  width: 15%;
+}
+
+.btnco {
+  display: flex;
+  flex-direction: column;
+  height: 10vh;
+  justify-content: space-evenly;
+  margin-top: 25px;
+}
