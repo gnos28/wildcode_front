@@ -48,14 +48,12 @@ const SignIn = () => {
   };
 
   const SendUser = async () => {
-    console.log("ca passe dans send user ");
-    if (emailInscription && passwordInscription) {
-      console.log("ca passe dans la condition");
+    if (emailInscription && passwordInscription && !token) {
       try {
         const user: CreateUser = {
-          email: emailInscription,
-          login: loginInscription,
           password: passwordInscription,
+          login: loginInscription,
+          email: emailInscription,
         };
         await userAPI.create(user);
       } catch (e) {
@@ -107,7 +105,7 @@ const SignIn = () => {
           <div className={styles.form}>
             <input
               className={styles.input}
-              type="text"
+              type="email"
               placeholder="email"
               onChange={(e) => {
                 setEmailInscription(e.target.value);
@@ -115,7 +113,7 @@ const SignIn = () => {
             />
             <input
               className={styles.input}
-              type="text"
+              type="password"
               placeholder="password"
               onChange={(e) => {
                 setPasswordInscription(e.target.value);

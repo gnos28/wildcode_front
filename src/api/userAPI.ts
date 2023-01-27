@@ -1,7 +1,7 @@
 import { api } from "./_graphQL";
 import { IUser, CreateUser } from "../interfaces/IUser";
 import { gql } from "@apollo/client";
-import { logMissingFieldErrors } from "@apollo/client/core/ObservableQuery";
+// import { logMissingFieldErrors } from "@apollo/client/core/ObservableQuery";
 
 export const userAPI = {
   create: async (user: Partial<CreateUser>): Promise<IUser> => {
@@ -20,9 +20,9 @@ export const userAPI = {
           }
         `,
         variables: {
-          email: user.email,
-          login: user.login,
           password: user.password,
+          login: user.login,
+          email: user.email,
         },
       })
     ).data.createUser as IUser;
