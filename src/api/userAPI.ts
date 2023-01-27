@@ -1,6 +1,7 @@
 import { api } from "./_graphQL";
 import { IUser, CreateUser } from "../interfaces/IUser";
 import { gql } from "@apollo/client";
+import { logMissingFieldErrors } from "@apollo/client/core/ObservableQuery";
 
 export const userAPI = {
   create: async (user: Partial<CreateUser>): Promise<IUser> => {
@@ -8,17 +9,20 @@ export const userAPI = {
       await api.mutate({
         // mutation à refaire lorsque le back sera OP
         mutation: gql`
-          mutation Mutation($user: iUser!) {
-            createUser(password: $password, email: $email) {
+          mutation Mutation(
+            $password: String!
+            $login: String!
+            $email: String!
+          ) {
+            createUser(password: $password, login: $login, email: $email) {
               id
             }
           }
         `,
         variables: {
-          user: {
-            email: user.email,
-            password: user.password,
-          },
+          email: user.email,
+          login: user.login,
+          password: user.password,
         },
       })
     ).data.createUser as IUser;
