@@ -1,8 +1,55 @@
 @import "../styles/variables.scss";
 
 .modal {
-  width: 100vw;
-  height: 100vh;
-  background-color: black;
+  width: 100%;
+  height: 100%;
+  background-color: transparent;
   z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.form {
+  background-color: #8fb7b7;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 30%;
+  border-radius: 50px;
+  box-shadow: #313131 5px 5px 3px 3px;
+}
+
+.input {
+  display: flex;
+  flex-direction: column;
+  margin-top: 6%;
+  margin-bottom: 2%;
+  display: flex;
+  align-items: center;
+  align-content: center;
+  text-align: center;
+  box-shadow: #313131 5px 5px 3px 3px;
+}
+
+.button {
+  color: white;
+  box-shadow: #313131 5px 5px 3px 3px;
+  margin-bottom: 7%;
+}
+
+.connection {
+  background-color: #313131;
+  margin-top: 25%;
+  margin-left: 70%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.inputCo {
+  margin-top: 10px;
+  margin-left: 10px;
+  margin-right: 10px;
+  text-align: center;
 }
