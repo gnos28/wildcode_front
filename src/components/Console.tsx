@@ -1,4 +1,5 @@
 import { ExecutedCode } from "../api/executeCodeAPI";
+import ReactJson from "react-json-view";
 import styles from "./Console.module.scss";
 
 type ConsoleProps = {
@@ -13,11 +14,28 @@ const Console = ({ consoleResult }: ConsoleProps) => {
       )}
     >
       {consoleResult &&
-        consoleResult.map((line, lineIndex) => (
-          <p className={styles[line.type]} key={lineIndex}>
-            {`>\u00a0` + line.message}
-          </p>
-        ))}
+        consoleResult.map((line, lineIndex) => {
+          console.log("line.message", line.message);
+
+          return (
+            <p className={styles[line.type]} key={lineIndex}>
+              <span>{`>\u00a0`}</span>
+              <span>
+                <ReactJson
+                  src={line.message}
+                  theme="hopscotch"
+                  collapsed={1}
+                  displayDataTypes={false}
+                  name={false}
+                  style={{
+                    backgroundColor: "black",
+                    fontSize: "16px",
+                  }}
+                />
+              </span>
+            </p>
+          );
+        })}
     </div>
   );
 };
