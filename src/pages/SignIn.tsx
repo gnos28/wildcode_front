@@ -1,14 +1,19 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import LoadToken from "../components/LoadToken";
+import { authAPI } from "../api/authAPI";
 
 const SignIn = () => {
-  const [username, setUsername] = useState("");
+  const [userEmail, setUserEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const [showLoadToken, setShowLoadToken] = useState(false);
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
+
+  const handleLogin = async () => {
+    const token = await authAPI.getToken(userEmail, password);
+
+    localStorage.setItem("token", token);
+  };
 
   useEffect(() => {
     if (token) {
@@ -21,7 +26,7 @@ const SignIn = () => {
       Email{" "}
       <input
         onChange={(e) => {
-          setUsername(e.target.value);
+          setUserEmail(e.target.value);
         }}
       />{" "}
       <br />
@@ -33,10 +38,7 @@ const SignIn = () => {
         }}
       />{" "}
       <br />
-      <button onClick={() => setShowLoadToken(true)}>Login</button>
-      {showLoadToken === true && (
-        <LoadToken username={username} password={password} />
-      )}
+      <button onClick={handleLogin}>Login</button>
     </div>
   );
 };
