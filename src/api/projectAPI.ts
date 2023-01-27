@@ -3,7 +3,7 @@ import { IProject, CreateProject } from "../interfaces/IProject";
 import { gql } from "@apollo/client";
 
 export const projectAPI = {
-  create: async (project: Partial<CreateProject>): Promise<IProject> => {
+  create: async (project: Omit<CreateProject, "userId">): Promise<IProject> => {
     const newProject = (
       await api.mutate({
         // mutation à refaire lorsque le back sera OP
@@ -12,13 +12,11 @@ export const projectAPI = {
             $isPublic: Boolean!
             $description: String!
             $name: String!
-            $userId: Float!
           ) {
             createProject(
               isPublic: $isPublic
               description: $description
               name: $name
-              userId: $userId
             ) {
               description
               id
@@ -34,7 +32,6 @@ export const projectAPI = {
           isPublic: project.isPublic,
           description: project.description,
           name: project.name,
-          userId: project.userId,
         },
       })
     ).data.createProject as IProject;
@@ -60,6 +57,56 @@ export const projectAPI = {
         `,
       })
     ).data.getAllProjects as IProject[];
+
+    return projects.map((projects) => ({
+      ...projects,
+      id: projects.id.toString(),
+    }));
+  },
+
+  getSharedWithMe: async (): Promise<IProject[]> => {
+    const projects = (
+      await api.query({
+        query: gql`
+          query getSharedWithMeProjects {
+            getSharedWithMeProjects {
+              description
+              id
+              id_storage_number
+              isPublic
+              name
+              nb_likes
+              nb_views
+            }
+          }
+        `,
+      })
+    ).data.getSharedWithMeProjects as IProject[];
+
+    return projects.map((projects) => ({
+      ...projects,
+      id: projects.id.toString(),
+    }));
+  },
+
+  getPublic: async (): Promise<IProject[]> => {
+    const projects = (
+      await api.query({
+        query: gql`
+          query getPublicProjects {
+            getPublicProjects {
+              description
+              id
+              id_storage_number
+              isPublic
+              name
+              nb_likes
+              nb_views
+            }
+          }
+        `,
+      })
+    ).data.getPublicProjects as IProject[];
 
     return projects.map((projects) => ({
       ...projects,
