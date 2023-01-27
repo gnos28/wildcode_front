@@ -1,10 +1,10 @@
 @import "../styles/variables.scss";
 
 .modal {
-  width: 100%;
-  height: 100%;
-  background-color: transparent;
-  z-index: 1;
+  // width: 100%;
+  // height: 100%;
+  // background-color: red;
+  // z-index: 1;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -14,37 +14,34 @@
   display: flex;
   align-items: center;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: center;
   width: 30%;
-  border-radius: 50px;
-  box-shadow: #313131 5px 5px 3px 3px;
+  border-radius: 20px;
+  height: 30%;
 }
 
 .input {
   display: flex;
   flex-direction: column;
-  margin-top: 6%;
-  margin-bottom: 2%;
+  margin-top: 1%;
   display: flex;
   align-items: center;
   align-content: center;
   text-align: center;
-  box-shadow: #313131 5px 5px 3px 3px;
 }
 
 .button {
   color: white;
-  box-shadow: #313131 5px 5px 3px 3px;
-  margin-bottom: 7%;
+  margin-top: 2vh;
 }
 
 .connection {
-  background-color: #313131;
   margin-top: 25%;
-  margin-left: 70%;
   display: flex;
   flex-direction: column;
   justify-content: center;
+  align-items: center;
+  width: 100vw;
 }
 
 .inputCo {
@@ -52,4 +49,13 @@
   margin-left: 10px;
   margin-right: 10px;
   text-align: center;
+  width: 15%;
+}
+
+.btnco {
+  display: flex;
+  flex-direction: column;
+  height: 10vh;
+  justify-content: space-evenly;
+  margin-top: 25px;
 }

@@ -77,19 +77,22 @@ const SignIn = () => {
         }}
       />{" "}
       <br />
-      <Button
-        onClick={() => setShowLoadToken(true)}
-        variant="outlined"
-        color="primary"
-      >
-        Login
-      </Button>
-      {showLoadToken === true && (
-        <LoadToken username={email} password={password} />
-      )}
-      <Button onClick={handleOpen} variant="outlined" color="primary">
-        inscription
-      </Button>
+      <div className={styles.btnco}>
+        <Button
+          onClick={() => setShowLoadToken(true)}
+          variant="outlined"
+          color="primary"
+          size="medium"
+        >
+          Login
+        </Button>
+        {showLoadToken === true && (
+          <LoadToken username={email} password={password} />
+        )}
+        <Button onClick={handleOpen} variant="outlined" color="primary">
+          inscription
+        </Button>
+      </div>
       <div>
         <Modal
           className={styles.modal}
