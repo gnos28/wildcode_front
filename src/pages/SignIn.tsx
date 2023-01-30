@@ -7,6 +7,8 @@ import { userAPI } from "../api/userAPI";
 import { CreateUser } from "../interfaces/IUser";
 import { authAPI } from "../api/authAPI";
 import UserContext from "../contexts/userContext";
+import Alert from "@mui/material/Alert";
+import Stack from "@mui/material/Stack";
 
 const SignIn = () => {
   const [email, setEmail] = useState("");
@@ -65,6 +67,14 @@ const SignIn = () => {
         console.error("error", e);
       }
     }
+    handleClose();
+    return (
+      <Stack sx={{ width: "100%" }} spacing={2}>
+        <Alert severity="success">
+          This is a success alert — check it out!
+        </Alert>
+      </Stack>
+    );
   };
 
   return (
