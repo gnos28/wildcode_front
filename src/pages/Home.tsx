@@ -22,8 +22,6 @@ const Home = () => {
 
   const getMyProjects = async () => {
     const projects = await projectAPI.getAll();
-    console.log("getMyProjects", projects);
-
     setMyProjects(projects);
   };
 
@@ -41,7 +39,7 @@ const Home = () => {
     console.log("createNewProject", createNewProject);
 
     setShowNewProjectModal(false);
-    const res =  await projectAPI.create(project);
+    const res = await projectAPI.create(project);
     console.log("projectAPI.created !", res);
     await getEveryProjects();
   };

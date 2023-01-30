@@ -14,6 +14,7 @@ const NewProjectModal = ({ createNewProject }: NewProjectModalProps) => {
   const [isPublic, setIsPublic] = useState(true);
   const [projectName, setProjectName] = useState<string>("");
   const [projectDescription, setProjectDescription] = useState<string>("");
+  const [isFormInvalid, setIsFormInvalid] = useState(false);
 
   const handleIsPuclicChange = () => {
     setIsPublic(!isPublic);
@@ -37,8 +38,9 @@ const NewProjectModal = ({ createNewProject }: NewProjectModalProps) => {
       description: projectDescription,
       isPublic,
     };
-
-    createNewProject(project);
+    return project.name !== ""
+      ? createNewProject(project)
+      : setIsFormInvalid(true);
   };
 
   return (
@@ -54,7 +56,10 @@ const NewProjectModal = ({ createNewProject }: NewProjectModalProps) => {
           }}
           value={projectName}
           onChange={handleProjectNameChange}
+          error={isFormInvalid}
+          helperText={isFormInvalid && "empty field"}
         />
+
         <TextField
           id="outlined-basic"
           label="Description du projet"

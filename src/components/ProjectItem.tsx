@@ -3,6 +3,7 @@ import { IProject } from "../interfaces/IProject";
 import styles from "./ProjectItem.module.scss";
 import ProjectContext from "../contexts/projectContext";
 import { useContext } from "react";
+import { projectAPI } from "../api/projectAPI";
 
 type ProjectItemProps = {
   project: IProject;
@@ -19,6 +20,10 @@ const ProjectItem = ({ project, owned }: ProjectItemProps) => {
     navigate("/Edit");
   };
 
+  const handleDelete = async () => {
+    await projectAPI.deleteProject(project.id);
+  };
+
   return (
     <article className={styles.article}>
       <h3>{project.name}</h3>
@@ -33,7 +38,7 @@ const ProjectItem = ({ project, owned }: ProjectItemProps) => {
           </button>
           {owned === true && (
             <button
-              onClick={() => {}}
+              onClick={handleDelete}
               className={[styles.button, styles.delete].join(" ")}
             >
               <img src="/trash.svg" alt="delete" draggable={false} />
