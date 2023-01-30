@@ -19,11 +19,16 @@ export const projectAPI = {
               name: $name
             ) {
               description
+              like {
+                id
+                userId {
+                  id
+                }
+              }
               id
               id_storage_number
               isPublic
               name
-              nb_likes
               nb_views
             }
           }
@@ -46,11 +51,16 @@ export const projectAPI = {
           query Query {
             getAllProjects {
               description
+              like {
+                id
+                userId {
+                  id
+                }
+              }
               id
               id_storage_number
               isPublic
               name
-              nb_likes
               nb_views
             }
           }
@@ -71,11 +81,16 @@ export const projectAPI = {
           query getSharedWithMeProjects {
             getSharedWithMeProjects {
               description
+              like {
+                id
+                userId {
+                  id
+                }
+              }
               id
               id_storage_number
               isPublic
               name
-              nb_likes
               nb_views
             }
           }
@@ -96,11 +111,16 @@ export const projectAPI = {
           query getPublicProjects {
             getPublicProjects {
               description
+              like {
+                id
+                userId {
+                  id
+                }
+              }
               id
               id_storage_number
               isPublic
               name
-              nb_likes
               nb_views
             }
           }
@@ -114,11 +134,11 @@ export const projectAPI = {
     }));
   },
 
-  addView: async (rawProjectId: number | string): Promise<IProject[]> => {
+  addView: async (rawProjectId: number | string): Promise<number> => {
     let projectId =
       typeof rawProjectId === "string" ? parseInt(rawProjectId) : rawProjectId;
 
-    const nb_views = (
+    const updatedProject = (
       await api.mutate({
         mutation: gql`
           mutation Mutation($projectId: Float!) {
@@ -133,6 +153,72 @@ export const projectAPI = {
       })
     ).data.addView as IProject[];
 
-    return nb_views;
+    return updatedProject[0]?.nb_views;
+  },
+
+  addLike: async (rawProjectId: number | string): Promise<number> => {
+    let projectId =
+      typeof rawProjectId === "string" ? parseInt(rawProjectId) : rawProjectId;
+
+    const updatedProject = (
+      await api.mutate({
+        mutation: gql`
+          mutation Mutation($projectId: Float!) {
+            addLike(projectId: $projectId) {
+              description
+              like {
+                id
+                userId {
+                  id
+                }
+              }
+              id
+              id_storage_number
+              isPublic
+              name
+              nb_views
+            }
+          }
+        `,
+        variables: {
+          projectId,
+        },
+      })
+    ).data.addLike as IProject[];
+
+    return updatedProject[0]?.like?.length || 0;
+  },
+
+  removeLike: async (rawProjectId: number | string): Promise<number> => {
+    let projectId =
+      typeof rawProjectId === "string" ? parseInt(rawProjectId) : rawProjectId;
+
+    const updatedProject = (
+      await api.mutate({
+        mutation: gql`
+          mutation Mutation($projectId: Float!) {
+            removeLike(projectId: $projectId) {
+              description
+              id
+              id_storage_number
+              isPublic
+              like {
+                id
+                userId {
+                  id
+                }
+              }
+              name
+              nb_views
+            }
+          }
+        `,
+        variables: {
+          projectId,
+        },
+      })
+    ).data.removeLike as IProject[];
+
+    return updatedProject[0]?.like?.length || 0;
   },
 };
