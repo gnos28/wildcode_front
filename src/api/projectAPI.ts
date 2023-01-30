@@ -113,4 +113,26 @@ export const projectAPI = {
       id: projects.id.toString(),
     }));
   },
+
+  addView: async (rawProjectId: number | string): Promise<IProject[]> => {
+    let projectId =
+      typeof rawProjectId === "string" ? parseInt(rawProjectId) : rawProjectId;
+
+    const nb_views = (
+      await api.mutate({
+        mutation: gql`
+          mutation Mutation($projectId: Float!) {
+            addView(projectId: $projectId) {
+              nb_views
+            }
+          }
+        `,
+        variables: {
+          projectId,
+        },
+      })
+    ).data.addView as IProject[];
+
+    return nb_views;
+  },
 };
