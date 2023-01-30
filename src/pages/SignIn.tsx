@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "./Signin.module.scss";
 import { Modal } from "@mui/material";
@@ -6,6 +6,7 @@ import Button from "@mui/material/Button/Button";
 import { userAPI } from "../api/userAPI";
 import { CreateUser } from "../interfaces/IUser";
 import { authAPI } from "../api/authAPI";
+import UserContext from "../contexts/userContext";
 import Alert from "@mui/material/Alert";
 import Stack from "@mui/material/Stack";
 
@@ -16,13 +17,17 @@ const SignIn = () => {
   const [emailInscription, setEmailInscription] = useState("");
   const [passwordInscription, setPasswordInscription] = useState("");
   const [loginInscription, setLoginInscription] = useState("");
+  const { user, setUser } = useContext(UserContext);
 
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
 
   const handleLogin = async () => {
-    const token = await authAPI.getToken(email, password);
+    const { token, userId } = await authAPI.getToken(email, password);
 
+    setUser({ ...user, id: userId.toString() });
+
+    localStorage.setItem("userId", userId.toString());
     localStorage.setItem("token", token);
 
     navigate("/");
@@ -59,7 +64,7 @@ const SignIn = () => {
         };
         await userAPI.create(user);
       } catch (e) {
-        console.log("error", e);
+        console.error("error", e);
       }
     }
     handleClose();

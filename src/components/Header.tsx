@@ -3,22 +3,36 @@ import { NavLink, useNavigate } from "react-router-dom";
 import styles from "./Header.module.scss";
 import ProjectContext from "../contexts/projectContext";
 import { useApolloClient } from "@apollo/client";
+import UserContext from "../contexts/userContext";
 
 const Header = () => {
   const [isAuth, setIsAuth] = useState(false);
-  const { project } = useContext(ProjectContext);
+  const { project, setProject } = useContext(ProjectContext);
+  const { user, setUser } = useContext(UserContext);
   const client = useApolloClient();
   const navigate = useNavigate();
 
   const token = localStorage.getItem("token");
+  const userId = localStorage.getItem("userId");
+
   useEffect(() => {
     if (token) {
       setIsAuth(true);
     }
   }, [token]);
 
+  useEffect(() => {
+    if (userId) {
+      setUser({ ...user, id: userId });
+    }
+  }, [userId]);
+
   const signOut = () => {
     localStorage.setItem("token", "");
+    localStorage.setItem("userId", "");
+    setUser({});
+    setProject({});
+
     client.resetStore();
     navigate("/login");
     setIsAuth(false);
