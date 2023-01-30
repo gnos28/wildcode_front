@@ -3,6 +3,7 @@ import { IProject } from "../interfaces/IProject";
 import styles from "./ProjectItem.module.scss";
 import ProjectContext from "../contexts/projectContext";
 import { useContext } from "react";
+import { projectAPI } from "../api/projectAPI";
 
 type ProjectItemProps = {
   project: IProject;
@@ -15,7 +16,7 @@ const ProjectItem = ({ project, owned }: ProjectItemProps) => {
   const navigate = useNavigate();
   const handleOpenProject = () => {
     setProject(project);
-
+    projectAPI.addView(project.id);
     navigate("/Edit");
   };
 
