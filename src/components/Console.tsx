@@ -15,8 +15,6 @@ const Console = ({ consoleResult }: ConsoleProps) => {
     >
       {consoleResult &&
         consoleResult.map((line, lineIndex) => {
-          console.log("line.message", line.message);
-
           return (
             <p className={styles[line.type]} key={lineIndex}>
               <span>{`>\u00a0`}</span>

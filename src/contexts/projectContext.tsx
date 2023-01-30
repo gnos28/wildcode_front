@@ -7,7 +7,7 @@ const initProject: Partial<IProject> = {
   name: undefined,
   description: undefined,
   isPublic: undefined,
-  nb_likes: undefined,
+  like: [],
   nb_views: undefined,
   file: [],
 };

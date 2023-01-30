@@ -36,11 +36,8 @@ const Home = () => {
   };
 
   const createNewProject = async (project: Omit<CreateProject, "userId">) => {
-    console.log("createNewProject", createNewProject);
-
     setShowNewProjectModal(false);
-    const res = await projectAPI.create(project);
-    console.log("projectAPI.created !", res);
+    await projectAPI.create(project);
     await getEveryProjects();
   };
 
@@ -72,6 +69,7 @@ const Home = () => {
             />
             <span>My Projects</span>
           </h2>
+<<<<<<< HEAD
 
           <div className={styles.projectsContainer}>
             {myProjects?.map((project) => (
@@ -85,6 +83,31 @@ const Home = () => {
               <span>new project</span>
             </article>
           </div>
+=======
+          {showMyProjectList && (
+            <div className={styles.projectsContainer}>
+              {myProjects?.map((project) => (
+                <ProjectItem
+                  key={project.id}
+                  project={project}
+                  owned={true}
+                  getEveryProjects={getEveryProjects}
+                />
+              ))}
+              <article
+                className={styles.newProject}
+                onClick={openNewProjectModal}
+              >
+                <img
+                  src="/add-circle.svg"
+                  alt="add"
+                  className={styles.addIcon}
+                />
+                <span>new project</span>
+              </article>
+            </div>
+          )}
+>>>>>>> 566f283c90a7c037831f03b6b19561a172a63aca
         </section>
 
         <section className={styles.section}>
@@ -96,11 +119,26 @@ const Home = () => {
             />
             <span>Projects shared with me</span>
           </h2>
+<<<<<<< HEAD
           <div className={styles.projectsContainer}>
             {sharedProjects?.map((project) => (
               <ProjectItem key={project.id} project={project} owned={false} />
             ))}
           </div>
+=======
+          {showSharedProjectList && (
+            <div className={styles.projectsContainer}>
+              {sharedProjects?.map((project) => (
+                <ProjectItem
+                  key={project.id}
+                  project={project}
+                  owned={false}
+                  getEveryProjects={getEveryProjects}
+                />
+              ))}
+            </div>
+          )}
+>>>>>>> 566f283c90a7c037831f03b6b19561a172a63aca
         </section>
 
         <section className={styles.section}>
@@ -112,11 +150,26 @@ const Home = () => {
             />
             <span>All public projects</span>
           </h2>
+<<<<<<< HEAD
           <div className={styles.projectsContainer}>
             {publicProjects?.map((project) => (
               <ProjectItem key={project.id} project={project} owned={false} />
             ))}
           </div>
+=======
+          {showAllProjectList && (
+            <div className={styles.projectsContainer}>
+              {publicProjects?.map((project) => (
+                <ProjectItem
+                  key={project.id}
+                  project={project}
+                  owned={false}
+                  getEveryProjects={getEveryProjects}
+                />
+              ))}
+            </div>
+          )}
+>>>>>>> 566f283c90a7c037831f03b6b19561a172a63aca
         </section>
       </div>
       {showNewProjectModal === true && (

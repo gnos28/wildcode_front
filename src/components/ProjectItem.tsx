@@ -4,14 +4,21 @@ import styles from "./ProjectItem.module.scss";
 import ProjectContext from "../contexts/projectContext";
 import { useContext } from "react";
 import { projectAPI } from "../api/projectAPI";
+import UserContext from "../contexts/userContext";
 
 type ProjectItemProps = {
   project: IProject;
   owned?: boolean;
+  getEveryProjects: () => Promise<void>;
 };
 
-const ProjectItem = ({ project, owned }: ProjectItemProps) => {
+const ProjectItem = ({
+  project,
+  owned,
+  getEveryProjects,
+}: ProjectItemProps) => {
   const { setProject } = useContext(ProjectContext);
+  const { user } = useContext(UserContext);
 
   const navigate = useNavigate();
   const handleOpenProject = () => {
@@ -20,8 +27,26 @@ const ProjectItem = ({ project, owned }: ProjectItemProps) => {
     navigate("/Edit");
   };
 
+<<<<<<< HEAD
   const handleDelete = async () => {
     await projectAPI.deleteProject(project.id);
+=======
+  const toggleLike = async () => {
+    const userId = user?.id;
+
+    const alreadyLiked =
+      userId !== undefined &&
+      (
+        project.like?.filter(
+          (like) => like.userId.id === parseInt(userId, 10)
+        ) || []
+      ).length > 0;
+
+    if (!alreadyLiked) await projectAPI.addLike(project.id);
+    else await projectAPI.removeLike(project.id);
+
+    await getEveryProjects();
+>>>>>>> 566f283c90a7c037831f03b6b19561a172a63aca
   };
 
   return (
@@ -70,9 +95,9 @@ const ProjectItem = ({ project, owned }: ProjectItemProps) => {
             {project.nb_views}
           </div>
 
-          <div>
+          <div className={styles.like} onClick={toggleLike}>
             <img src="/heart-full.svg" alt="likes" draggable={false} />
-            {project.nb_likes}
+            {project.like?.length || 0}
           </div>
         </div>
       </div>
