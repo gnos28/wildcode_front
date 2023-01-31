@@ -34,8 +34,6 @@ const Editeur = ({ sendMonaco }: EditeurProps) => {
   }
 
   const execute = () => {
-    // console.log(editorRef.current.getValue());
-
     const code = editorRef.current.getValue();
 
     if (code) sendMonaco(code);
@@ -45,7 +43,6 @@ const Editeur = ({ sendMonaco }: EditeurProps) => {
     // do conditional chaining
     monaco?.languages.typescript.javascriptDefaults.setEagerModelSync(true);
     const willUpdate = setTimeout(() => {
-      console.log("coucou", editorCode);
       setIsSaveOnline(true);
     }, 5000);
     return () => clearTimeout(willUpdate);

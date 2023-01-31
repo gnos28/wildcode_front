@@ -1,7 +1,17 @@
 import { gql } from "@apollo/client";
 
 const fileRequest = {
-  UPDATE_FILE: gql`
+  getFilesByProjectId: gql`
+    query GetAllProjects($projectId: String!) {
+      getFilesByProjectId(projectId: $projectId) {
+        id
+        id_storage_file
+        language
+        name
+      }
+    }
+  `,
+  updateCodeFile: gql`
     mutation UpdateCodeFile(
       $contentData: String!
       $fileId: Float!
