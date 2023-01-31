@@ -10,9 +10,19 @@ type Theme = "light" | "vs-dark";
 
 const Editeur = ({ sendMonaco }: EditeurProps) => {
   const [theme, setTheme] = useState<Theme>("light");
+
+  // State Booléen pour savoir si le document est sauvegarder en ligne
+  const [isSaveOnline, setIsSaveOnline] = useState(true);
+  const [editorCode, setEditorCode] = useState("");
+
   // const editor = document.getElementById("resize");
   // const [input, setInput] = useState<string>();
   const editorRef = useRef<any>(null);
+
+  const getMonacoText = () => {
+    setIsSaveOnline(false);
+    setEditorCode(editorRef.current.getValue());
+  };
 
   const monaco = useMonaco();
   function toggleTheme() {
@@ -34,7 +44,12 @@ const Editeur = ({ sendMonaco }: EditeurProps) => {
   useEffect(() => {
     // do conditional chaining
     monaco?.languages.typescript.javascriptDefaults.setEagerModelSync(true);
-  }, [monaco]);
+    const willUpdate = setTimeout(() => {
+      console.log("coucou", editorCode);
+      setIsSaveOnline(true);
+    }, 5000);
+    return () => clearTimeout(willUpdate);
+  }, [monaco, editorCode]);
 
   return (
     <div className={styles.container}>
@@ -42,6 +57,7 @@ const Editeur = ({ sendMonaco }: EditeurProps) => {
         <button onClick={execute}>
           <img src="/start.svg" alt="execute code" draggable={false} />
         </button>
+        <p>{isSaveOnline ? "Sauvegarde réussie" : "Non sauvegardé"}</p>
         <button onClick={toggleTheme}>
           {theme === "light" ? "light mode" : "dark mode"}
         </button>
@@ -53,6 +69,7 @@ const Editeur = ({ sendMonaco }: EditeurProps) => {
           defaultLanguage="javascript"
           theme={theme}
           onMount={handleEditorDidMount}
+          onChange={getMonacoText}
         />
       </div>
     </div>
