@@ -5,6 +5,7 @@ import ProjectContext from "../contexts/projectContext";
 import { useContext } from "react";
 import { projectAPI } from "../api/projectAPI";
 import UserContext from "../contexts/userContext";
+import { isLiked } from "../utils/isLiked";
 
 type ProjectItemProps = {
   project: IProject;
@@ -87,11 +88,15 @@ const ProjectItem = ({
 
           <div>
             <img src="/eye.svg" alt="views" draggable={false} />
-            {project.nb_views}
+            {project?.nb_views}
           </div>
 
           <div className={styles.like} onClick={toggleLike}>
-            <img src="/heart-full.svg" alt="likes" draggable={false} />
+            <img
+              src={isLiked(project, user, "src")}
+              alt={isLiked(project, user, "alt")}
+              draggable={false}
+            />
             {project.like?.length || 0}
           </div>
         </div>
