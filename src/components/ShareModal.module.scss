@@ -29,6 +29,7 @@ $borderRadius: 10px;
 
   background-color: rgba(0, 0, 0, 0.137);
   backdrop-filter: blur(10px);
+  z-index: 1;
 
   display: flex;
   justify-content: center;
@@ -60,9 +61,28 @@ $borderRadius: 10px;
       text-align: center;
     }
 
+    h4 {
+      margin-top: 0;
+    }
+
     .buttonContainer {
       width: auto;
       align-self: flex-end;
     }
+  }
+}
+
+.table {
+  border-spacing: 0;
+  tr {
+    td {
+      padding: 0 5px;
+      text-align: center;
+      width: 90px;
+    }
+  }
+
+  tr:not(:first-child) {
+    background-color: $main-color-light;
   }
 }

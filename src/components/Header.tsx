@@ -4,16 +4,77 @@ import styles from "./Header.module.scss";
 import ProjectContext from "../contexts/projectContext";
 import { useApolloClient } from "@apollo/client";
 import UserContext from "../contexts/userContext";
+import { projectAPI } from "../api/projectAPI";
+import { ILike } from "../interfaces/IProject";
+import ShareModalContext from "../contexts/shareModalContext";
+import { isLiked } from "../utils/isLiked";
 
 const Header = () => {
   const [isAuth, setIsAuth] = useState(false);
   const { project, setProject } = useContext(ProjectContext);
   const { user, setUser } = useContext(UserContext);
+  const { setShareModal } = useContext(ShareModalContext);
   const client = useApolloClient();
   const navigate = useNavigate();
 
   const token = localStorage.getItem("token");
   const userId = localStorage.getItem("userId");
+
+  const handleToggleModal = () => {
+    const projectId = project.id;
+
+    if (projectId) setShareModal({ projectId: parseInt(projectId, 10) });
+  };
+
+  const toggleLike = async () => {
+    const userId = user?.id;
+    const projectLike = project.like;
+
+    const alreadyLiked =
+      userId !== undefined &&
+      (
+        projectLike?.filter(
+          (like) => like.userId.id === parseInt(userId, 10)
+        ) || []
+      ).length > 0;
+
+    const projectId = project.id;
+
+    if (projectId && userId) {
+      if (!alreadyLiked) {
+        await projectAPI.addLike(projectId);
+
+        const newLike: ILike = { id: -1, userId: { id: parseInt(userId, 10) } };
+
+        setProject({
+          ...project,
+          like: projectLike ? [...projectLike, newLike] : [newLike],
+        });
+      } else {
+        await projectAPI.removeLike(projectId);
+
+        setProject({
+          ...project,
+          like: projectLike
+            ? projectLike.filter(
+                (like) => like.userId.id !== parseInt(userId, 10)
+              )
+            : [],
+        });
+      }
+    }
+  };
+
+  const signOut = () => {
+    localStorage.setItem("token", "");
+    localStorage.setItem("userId", "");
+    setUser({});
+    setProject({});
+
+    client.resetStore();
+    navigate("/login");
+    setIsAuth(false);
+  };
 
   useEffect(() => {
     if (token) {
@@ -27,63 +88,55 @@ const Header = () => {
     }
   }, [userId]);
 
-  const signOut = () => {
-    localStorage.setItem("token", "");
-    localStorage.setItem("userId", "");
-    setUser({});
-    setProject({});
-
-    client.resetStore();
-    navigate("/login");
-    setIsAuth(false);
-  };
-
   return (
-    <header className={styles.container}>
-      {project.name && (
-        <div className={[styles.header, styles.headerLeft].join(" ")}>
-          <img
-            src="/list.svg"
-            alt="list"
-            draggable={false}
-            className={styles.img}
-          />
-          <h2>{project.name}</h2>
-          <img
-            src="/people-group.svg"
-            alt="people-group"
-            draggable={false}
-            className={styles.img}
-          />
-          <img
-            src="/heart-empty.svg"
-            alt="heart-empty"
-            draggable={false}
-            className={styles.img}
-          />
-        </div>
-      )}
+    <>
+      <header className={styles.container}>
+        {project.name && (
+          <div className={[styles.header, styles.headerLeft].join(" ")}>
+            <img
+              src="/list.svg"
+              alt="list"
+              draggable={false}
+              className={styles.img}
+            />
+            <h2>{project.name}</h2>
+            <img
+              src="/share.svg"
+              alt="people-group"
+              draggable={false}
+              className={styles.img}
+              onClick={handleToggleModal}
+            />
+            <img
+              src={isLiked(project, user, "src")}
+              alt={isLiked(project, user, "alt")}
+              draggable={false}
+              className={styles.img}
+              onClick={toggleLike}
+            />
+          </div>
+        )}
 
-      <h1 className={styles.middle}>
-        <img
-          src="/wildcodeonline.webp"
-          alt="Wild Code Online logo"
-          draggable={false}
-        />
-      </h1>
-
-      <div className={[styles.header, styles.headerRight].join(" ")}>
-        <button onClick={signOut}>Logout</button>
-        <NavLink to="/Profil">
+        <h1 className={styles.middle}>
           <img
-            src="/people.svg"
-            alt="people"
+            src="/wildcodeonline.webp"
+            alt="Wild Code Online logo"
             draggable={false}
-            className={styles.img}
           />
-        </NavLink>
+        </h1>
 
-        {/* <NavLink to="/Profil">
+        <div className={[styles.header, styles.headerRight].join(" ")}>
+          <button onClick={signOut}>Logout</button>
+          <NavLink to="/Profil">
+            <img
+              src="/people.svg"
+              alt="people"
+              draggable={false}
+              className={styles.img}
+            />
+          </NavLink>
+
+          {/* <NavLink to="/Profil">
           <img
             src="/people.svg"
             alt="people"
@@ -92,25 +145,26 @@ const Header = () => {
           />
         </NavLink> */}
 
-        <NavLink to="/Settings">
-          <img
-            src="/settings.svg"
-            alt="settings"
-            draggable={false}
-            className={styles.img}
-          />
-        </NavLink>
+          <NavLink to="/Settings">
+            <img
+              src="/settings.svg"
+              alt="settings"
+              draggable={false}
+              className={styles.img}
+            />
+          </NavLink>
 
-        <NavLink to="/">
-          <img
-            src="/home.svg"
-            alt="home"
-            draggable={false}
-            className={styles.img}
-          />
-        </NavLink>
-      </div>
-    </header>
+          <NavLink to="/">
+            <img
+              src="/home.svg"
+              alt="home"
+              draggable={false}
+              className={styles.img}
+            />
+          </NavLink>
+        </div>
+      </header>
+    </>
   );
 };
 
