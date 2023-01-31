@@ -36,17 +36,17 @@ export const userAPI = {
         // query à refaire lorsque le back sera OP
         query: gql`
           query Query {
-            User {
+            getAllUsers {
               id
               email
               login
-              date_start_subscription
               date_end_subscription
+              date_start_subscription
             }
           }
         `,
       })
-    ).data.User as IUser[];
+    ).data.getAllUsers as IUser[];
 
     return users.map((user) => ({ ...user, id: user.id.toString() }));
   },
