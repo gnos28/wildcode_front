@@ -1,9 +1,4 @@
-import {
-  Autocomplete,
-  Checkbox,
-  FormControlLabel,
-  TextField,
-} from "@mui/material";
+import { Autocomplete, Checkbox, Switch, TextField } from "@mui/material";
 import React, {
   BaseSyntheticEvent,
   useContext,
@@ -13,18 +8,22 @@ import React, {
 import ProjectContext from "../contexts/projectContext";
 import ShareModalContext from "../contexts/shareModalContext";
 import styles from "./ShareModal.module.scss";
+import modalStyles from "../styles/modal.module.scss";
 import { userAPI } from "../api/userAPI";
 import { IUser } from "../interfaces/IUser";
 import { projectShareAPI } from "../api/projectShareAPI";
-import { IProjectShare } from "../interfaces/IProject";
+import { IProject, IProjectShare, UpdateProject } from "../interfaces/IProject";
+import UserContext from "../contexts/userContext";
+import { projectAPI } from "../api/projectAPI";
 
 type ShareModalProps = {
   closeShareModal: () => void;
 };
 
 const ShareModal = ({ closeShareModal }: ShareModalProps) => {
-  const { shareModal, setShareModal } = useContext(ShareModalContext);
+  const { shareModal } = useContext(ShareModalContext);
   const { project, setProject } = useContext(ProjectContext);
+  const { user } = useContext(UserContext);
 
   const [userList, setUserList] = useState<IUser[]>([]);
   const [selectValue, setSelectValue] = useState("");
@@ -71,6 +70,17 @@ const ShareModal = ({ closeShareModal }: ShareModalProps) => {
     }
   };
 
+  const togglePublic = async () => {
+    const updatedProject: Partial<IProject> = {
+      isPublic: !project.isPublic,
+    };
+    const projectId = project.id;
+    if (projectId !== undefined) {
+      await projectAPI.update(projectId, updatedProject);
+      setProject({ ...project, isPublic: !project.isPublic });
+    }
+  };
+
   const toggleCheckbox = async (
     e: React.ChangeEvent<HTMLInputElement>,
     type: "read" | "write" | "comment",
@@ -92,14 +102,24 @@ const ShareModal = ({ closeShareModal }: ShareModalProps) => {
     });
   };
 
+  const getUserList = () => {
+    const projectProjectShare = project.projectShare;
+
+    let alreadySharedWithIds: string[] = [];
+    if (projectProjectShare)
+      alreadySharedWithIds = projectProjectShare.map((pshare) =>
+        pshare.userId.id.toString()
+      );
+
+    return userList
+      .filter((u) => u.id !== user.id && !alreadySharedWithIds.includes(u.id))
+      .map((user) => user.login);
+  };
+
   const getAllUsers = async () => {
     const allUsers = await userAPI.getAll();
     setUserList(allUsers);
-    console.log("allUsers", allUsers);
   };
-
-  console.log("shareModal", shareModal);
-  console.log("project", project);
 
   const handleModalClick = (e: BaseSyntheticEvent) => {
     e.stopPropagation();
@@ -110,42 +130,55 @@ const ShareModal = ({ closeShareModal }: ShareModalProps) => {
   }, []);
 
   return (
-    <div className={styles.modalBackground} onClick={closeShareModal}>
-      <div className={styles.modalContainer} onClick={handleModalClick}>
+    <div className={modalStyles.modalBackground} onClick={closeShareModal}>
+      <div className={modalStyles.modalContainer} onClick={handleModalClick}>
         <h3>Partager le projet</h3>
+        <div className={styles.flexRow}>
+          <Switch
+            checked={project.isPublic}
+            onChange={togglePublic}
+            name="antoine"
+            defaultChecked
+          />
+          <h4>Projet {project.isPublic ? "public" : "privé"}</h4>
+        </div>
         <div>
           <h4>Liste des partages</h4>
-          <table className={styles.table}>
-            <tr>
-              <td></td>
-              <td>lecture</td>
-              <td>écriture</td>
-              <td>commentaire</td>
-            </tr>
-            {project.projectShare?.map((share) => (
+          {project.projectShare && project.projectShare.length > 0 ? (
+            <table className={styles.table}>
               <tr>
-                <td>{share.userId.login}</td>
-                <td>
-                  <Checkbox
-                    checked={share.read}
-                    onChange={(e) => toggleCheckbox(e, "read", share.id)}
-                  />
-                </td>
-                <td>
-                  <Checkbox
-                    checked={share.write}
-                    onChange={(e) => toggleCheckbox(e, "write", share.id)}
-                  />
-                </td>
-                <td>
-                  <Checkbox
-                    checked={share.comment}
-                    onChange={(e) => toggleCheckbox(e, "comment", share.id)}
-                  />
-                </td>
+                <td></td>
+                <td>lecture</td>
+                <td>écriture</td>
+                <td>commentaire</td>
               </tr>
-            ))}
-          </table>
+              {project.projectShare?.map((share) => (
+                <tr>
+                  <td>{share.userId.login}</td>
+                  <td>
+                    <Checkbox
+                      checked={share.read}
+                      onChange={(e) => toggleCheckbox(e, "read", share.id)}
+                    />
+                  </td>
+                  <td>
+                    <Checkbox
+                      checked={share.write}
+                      onChange={(e) => toggleCheckbox(e, "write", share.id)}
+                    />
+                  </td>
+                  <td>
+                    <Checkbox
+                      checked={share.comment}
+                      onChange={(e) => toggleCheckbox(e, "comment", share.id)}
+                    />
+                  </td>
+                </tr>
+              ))}
+            </table>
+          ) : (
+            "< ce projet n'a pas été partagé >"
+          )}
         </div>
         <div>
           <h4>Ajouter un utilisateur</h4>
@@ -153,7 +186,7 @@ const ShareModal = ({ closeShareModal }: ShareModalProps) => {
             value={selectValue}
             onChange={handleAddUser}
             size="small"
-            options={userList.map((user) => [user.email, user.login]).flat()}
+            options={getUserList()}
             sx={{
               width: "auto",
               height: "auto",

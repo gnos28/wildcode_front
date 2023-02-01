@@ -1,4 +1,5 @@
 import styles from "./NewProjectModal.module.scss";
+import modalStyles from "../styles/modal.module.scss";
 import TextField from "@mui/material/TextField";
 import Switch from "@mui/material/Switch";
 import Button from "@mui/material/Button";
@@ -50,8 +51,8 @@ const NewProjectModal = ({
   };
 
   return (
-    <div className={styles.modalBackground} onClick={closeNewProjectModal}>
-      <div className={styles.modalContainer} onClick={handleModalClick}>
+    <div className={modalStyles.modalBackground} onClick={closeNewProjectModal}>
+      <div className={modalStyles.modalContainer} onClick={handleModalClick}>
         <h3>Création d'un nouveau projet</h3>
         <TextField
           id="outlined-basic"
@@ -80,13 +81,13 @@ const NewProjectModal = ({
             <Switch
               checked={isPublic}
               onChange={handleIsPuclicChange}
-              name="antoine"
+              name="public / private switch"
               defaultChecked
             />
           }
           label="Projet public ?"
         />
-        <div className={styles.buttonContainer}>
+        <div className={modalStyles.buttonContainer}>
           <Button variant="contained" onClick={handleSubmit}>
             Valider
           </Button>
