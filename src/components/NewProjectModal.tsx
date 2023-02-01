@@ -1,3 +1,4 @@
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import styles from "./NewProjectModal.module.scss";
 import modalStyles from "../styles/modal.module.scss";
 import TextField from "@mui/material/TextField";
