@@ -22,7 +22,7 @@ const ProjectItem = ({
   const { user } = useContext(UserContext);
 
   const navigate = useNavigate();
-  const handleOpenProject = () => {
+  const handleOpenProject = async () => {
     setProject(project);
     projectAPI.addView(project.id);
     navigate("/Edit");
