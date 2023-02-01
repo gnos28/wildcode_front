@@ -165,9 +165,14 @@ export const projectAPI = {
       const projects = (
         await api.query({
           query: gql`
-            query getPublicProjects {
+            query Query {
               getPublicProjects {
+                id
+                name
                 description
+                id_storage_number
+                isPublic
+                nb_views
                 like {
                   id
                   userId {
@@ -181,15 +186,10 @@ export const projectAPI = {
                     id
                   }
                   id
-                  comment
                   read
+                  comment
                   write
                 }
-                id
-                id_storage_number
-                isPublic
-                name
-                nb_views
                 userId {
                   id
                   login
@@ -198,7 +198,7 @@ export const projectAPI = {
             }
           `,
         })
-      ).data?.getPublicProjects as IProject[];
+      ).data.getPublicProjects as IProject[];
 
       return (
         projects?.map((projects) => ({
