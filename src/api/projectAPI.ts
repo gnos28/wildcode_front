@@ -1,5 +1,5 @@
 import { api } from "./_graphQL";
-import { IProject, CreateProject } from "../interfaces/IProject";
+import { IProject, CreateProject, UpdateProject } from "../interfaces/IProject";
 import { gql } from "@apollo/client";
 
 export const projectAPI = {
@@ -25,6 +25,17 @@ export const projectAPI = {
                   id
                 }
               }
+              projectShare {
+                userId {
+                  login
+                  email
+                  id
+                }
+                id
+                comment
+                read
+                write
+              }
               id
               id_storage_number
               isPublic
@@ -45,63 +56,107 @@ export const projectAPI = {
   },
 
   getAll: async (): Promise<IProject[]> => {
-    const projects = (
-      await api.query({
-        query: gql`
-          query Query {
-            getAllProjects {
-              description
-              like {
+    try {
+      const projects = (
+        await api.query({
+          query: gql`
+            query Query {
+              getAllProjects {
+                description
+                like {
+                  id
+                  userId {
+                    id
+                  }
+                }
+                projectShare {
+                  userId {
+                    login
+                    email
+                    id
+                  }
+                  id
+                  comment
+                  read
+                  write
+                }
                 id
+                id_storage_number
+                isPublic
+                name
+                nb_views
                 userId {
                   id
                 }
               }
-              id
-              id_storage_number
-              isPublic
-              name
-              nb_views
             }
-          }
-        `,
-      })
-    ).data.getAllProjects as IProject[];
+          `,
+        })
+      ).data.getAllProjects as IProject[];
 
-    return projects.map((projects) => ({
-      ...projects,
-      id: projects.id.toString(),
-    }));
+      console.log("projectAPI.getall", projects);
+
+      return (
+        projects?.map((projects) => ({
+          ...projects,
+          id: projects.id.toString(),
+        })) || []
+      );
+    } catch (e) {
+      console.error(e);
+      return [];
+    }
   },
 
   getSharedWithMe: async (): Promise<IProject[]> => {
-    const projects = (
-      await api.query({
-        query: gql`
-          query getSharedWithMeProjects {
-            getSharedWithMeProjects {
-              description
-              like {
+    try {
+      const projects = (
+        await api.query({
+          query: gql`
+            query getSharedWithMeProjects {
+              getSharedWithMeProjects {
+                description
+                like {
+                  id
+                  userId {
+                    id
+                  }
+                }
+                projectShare {
+                  userId {
+                    login
+                    email
+                    id
+                  }
+                  id
+                  comment
+                  read
+                  write
+                }
                 id
+                id_storage_number
+                isPublic
+                name
+                nb_views
                 userId {
                   id
                 }
               }
-              id
-              id_storage_number
-              isPublic
-              name
-              nb_views
             }
-          }
-        `,
-      })
-    ).data.getSharedWithMeProjects as IProject[];
+          `,
+        })
+      ).data.getSharedWithMeProjects as IProject[];
 
-    return projects.map((projects) => ({
-      ...projects,
-      id: projects.id.toString(),
-    }));
+      return (
+        projects?.map((projects) => ({
+          ...projects,
+          id: projects.id.toString(),
+        })) || []
+      );
+    } catch (e) {
+      console.error(e);
+      return [];
+    }
   },
 
   deleteProject: async (projectId: string): Promise<IProject> => {
@@ -122,33 +177,54 @@ export const projectAPI = {
   },
 
   getPublic: async (): Promise<IProject[]> => {
-    const projects = (
-      await api.query({
-        query: gql`
-          query getPublicProjects {
-            getPublicProjects {
-              description
-              like {
+    try {
+      const projects = (
+        await api.query({
+          query: gql`
+            query getPublicProjects {
+              getPublicProjects {
+                description
+                like {
+                  id
+                  userId {
+                    id
+                  }
+                }
+                projectShare {
+                  userId {
+                    login
+                    email
+                    id
+                  }
+                  id
+                  comment
+                  read
+                  write
+                }
                 id
+                id_storage_number
+                isPublic
+                name
+                nb_views
                 userId {
                   id
                 }
               }
-              id
-              id_storage_number
-              isPublic
-              name
-              nb_views
             }
-          }
-        `,
-      })
-    ).data.getPublicProjects as IProject[];
+          `,
+        })
+      ).data?.getPublicProjects as IProject[];
 
-    return projects.map((projects) => ({
-      ...projects,
-      id: projects.id.toString(),
-    }));
+      return (
+        projects?.map((projects) => ({
+          ...projects,
+          id: projects.id.toString(),
+        })) || []
+      );
+    } catch (e) {
+      console.error(e);
+      return [];
+    }
   },
 <<<<<<< HEAD
 =======
@@ -172,6 +248,8 @@ export const projectAPI = {
       })
     ).data.addView as IProject[];
 
+    console.log("updatedProject", updatedProject);
+
     return updatedProject[0]?.nb_views;
   },
 
@@ -190,6 +268,17 @@ export const projectAPI = {
                 userId {
                   id
                 }
+              }
+              projectShare {
+                userId {
+                  login
+                  email
+                  id
+                }
+                id
+                comment
+                read
+                write
               }
               id
               id_storage_number
@@ -227,6 +316,17 @@ export const projectAPI = {
                   id
                 }
               }
+              projectShare {
+                userId {
+                  login
+                  email
+                  id
+                }
+                id
+                comment
+                read
+                write
+              }
               name
               nb_views
             }
@@ -240,5 +340,34 @@ export const projectAPI = {
 
     return updatedProject[0]?.like?.length || 0;
   },
+<<<<<<< HEAD
 >>>>>>> 566f283c90a7c037831f03b6b19561a172a63aca
+=======
+
+  update: async (
+    rawProjectId: number | string,
+    project: Partial<IProject>
+  ): Promise<number> => {
+    let projectId =
+      typeof rawProjectId === "string" ? parseInt(rawProjectId) : rawProjectId;
+
+    const updatedProjectId = (
+      await api.mutate({
+        mutation: gql`
+          mutation Mutation($projectId: Float!, $project: iProject!) {
+            updateProject(projectId: $projectId, project: $project) {
+              id
+            }
+          }
+        `,
+        variables: {
+          projectId,
+          project,
+        },
+      })
+    ).data;
+
+    return updatedProjectId;
+  },
+>>>>>>> 30bccb6bf632cb11e40e55ca81cf9b6849092744
 };

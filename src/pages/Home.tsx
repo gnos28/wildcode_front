@@ -1,21 +1,35 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import styles from "./Home.module.scss";
 import ProjectItem from "../components/ProjectItem";
 import { useNavigate } from "react-router-dom";
 import { projectAPI } from "../api/projectAPI";
 import { IProject, CreateProject } from "../interfaces/IProject";
 import NewProjectModal from "../components/NewProjectModal";
+import UserContext from "../contexts/userContext";
+import ProjectContext from "../contexts/projectContext";
 
 const Home = () => {
   const [myProjects, setMyProjects] = useState<IProject[]>();
   const [sharedProjects, setSharedProjects] = useState<IProject[]>();
   const [publicProjects, setPublicProjects] = useState<IProject[]>();
   const [showNewProjectModal, setShowNewProjectModal] = useState(false);
+<<<<<<< HEAD
+=======
+  const [showMyProjectList, setShowMyProjectList] = useState(true);
+  const [showSharedProjectList, setShowSharedProjectList] = useState(true);
+  const [showAllProjectList, setShowAllProjectList] = useState(true);
+  const { user } = useContext(UserContext);
+  const { setProject } = useContext(ProjectContext);
+>>>>>>> 30bccb6bf632cb11e40e55ca81cf9b6849092744
 
   const navigate = useNavigate();
 
   const openNewProjectModal = () => {
     setShowNewProjectModal(true);
+  };
+
+  const closeNewProjectModal = () => {
+    setShowNewProjectModal(false);
   };
 
   const token = localStorage.getItem("token");
@@ -55,6 +69,7 @@ const Home = () => {
 
   useEffect(() => {
     getEveryProjects();
+    setProject({});
   }, []);
 
   return (
@@ -69,6 +84,7 @@ const Home = () => {
             />
             <span>My Projects</span>
           </h2>
+<<<<<<< HEAD
 <<<<<<< HEAD
 
           <div className={styles.projectsContainer}>
@@ -85,6 +101,9 @@ const Home = () => {
           </div>
 =======
           {showMyProjectList && (
+=======
+          {showMyProjectList && myProjects && myProjects.length > 0 && (
+>>>>>>> 30bccb6bf632cb11e40e55ca81cf9b6849092744
             <div className={styles.projectsContainer}>
               {myProjects?.map((project) => (
                 <ProjectItem
@@ -120,6 +139,7 @@ const Home = () => {
             <span>Projects shared with me</span>
           </h2>
 <<<<<<< HEAD
+<<<<<<< HEAD
           <div className={styles.projectsContainer}>
             {sharedProjects?.map((project) => (
               <ProjectItem key={project.id} project={project} owned={false} />
@@ -139,6 +159,22 @@ const Home = () => {
             </div>
           )}
 >>>>>>> 566f283c90a7c037831f03b6b19561a172a63aca
+=======
+          {showSharedProjectList &&
+            sharedProjects &&
+            sharedProjects.length > 0 && (
+              <div className={styles.projectsContainer}>
+                {sharedProjects?.map((project) => (
+                  <ProjectItem
+                    key={project.id}
+                    project={project}
+                    owned={false}
+                    getEveryProjects={getEveryProjects}
+                  />
+                ))}
+              </div>
+            )}
+>>>>>>> 30bccb6bf632cb11e40e55ca81cf9b6849092744
         </section>
 
         <section className={styles.section}>
@@ -150,6 +186,7 @@ const Home = () => {
             />
             <span>All public projects</span>
           </h2>
+<<<<<<< HEAD
 <<<<<<< HEAD
           <div className={styles.projectsContainer}>
             {publicProjects?.map((project) => (
@@ -170,10 +207,31 @@ const Home = () => {
             </div>
           )}
 >>>>>>> 566f283c90a7c037831f03b6b19561a172a63aca
+=======
+          {showAllProjectList &&
+            publicProjects &&
+            publicProjects.length > 0 && (
+              <div className={styles.projectsContainer}>
+                {publicProjects
+                  ?.filter((project) => project.userId?.id === user.id)
+                  .map((project) => (
+                    <ProjectItem
+                      key={project.id}
+                      project={project}
+                      owned={false}
+                      getEveryProjects={getEveryProjects}
+                    />
+                  ))}
+              </div>
+            )}
+>>>>>>> 30bccb6bf632cb11e40e55ca81cf9b6849092744
         </section>
       </div>
       {showNewProjectModal === true && (
-        <NewProjectModal createNewProject={createNewProject} />
+        <NewProjectModal
+          createNewProject={createNewProject}
+          closeNewProjectModal={closeNewProjectModal}
+        />
       )}
     </>
   );

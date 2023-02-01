@@ -1,20 +1,29 @@
 import styles from "./NewProjectModal.module.scss";
+import modalStyles from "../styles/modal.module.scss";
 import TextField from "@mui/material/TextField";
 import Switch from "@mui/material/Switch";
 import Button from "@mui/material/Button";
 import { FormControlLabel } from "@mui/material";
-import { useState } from "react";
+import { BaseSyntheticEvent, useState } from "react";
 import { CreateProject } from "../interfaces/IProject";
 
 type NewProjectModalProps = {
   createNewProject: (project: Omit<CreateProject, "userId">) => Promise<void>;
+  closeNewProjectModal: () => void;
 };
 
-const NewProjectModal = ({ createNewProject }: NewProjectModalProps) => {
+const NewProjectModal = ({
+  createNewProject,
+  closeNewProjectModal,
+}: NewProjectModalProps) => {
   const [isPublic, setIsPublic] = useState(true);
   const [projectName, setProjectName] = useState<string>("");
   const [projectDescription, setProjectDescription] = useState<string>("");
   const [isFormInvalid, setIsFormInvalid] = useState(false);
+
+  const handleModalClick = (e: BaseSyntheticEvent) => {
+    e.stopPropagation();
+  };
 
   const handleIsPuclicChange = () => {
     setIsPublic(!isPublic);
@@ -44,8 +53,8 @@ const NewProjectModal = ({ createNewProject }: NewProjectModalProps) => {
   };
 
   return (
-    <div className={styles.modalBackground}>
-      <div className={styles.modalContainer}>
+    <div className={modalStyles.modalBackground} onClick={closeNewProjectModal}>
+      <div className={modalStyles.modalContainer} onClick={handleModalClick}>
         <h3>Création d'un nouveau projet</h3>
         <TextField
           id="outlined-basic"
@@ -77,13 +86,13 @@ const NewProjectModal = ({ createNewProject }: NewProjectModalProps) => {
             <Switch
               checked={isPublic}
               onChange={handleIsPuclicChange}
-              name="antoine"
+              name="public / private switch"
               defaultChecked
             />
           }
           label="Projet public ?"
         />
-        <div className={styles.buttonContainer}>
+        <div className={modalStyles.buttonContainer}>
           <Button variant="contained" onClick={handleSubmit}>
             Valider
           </Button>
