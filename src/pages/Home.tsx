@@ -10,6 +10,7 @@ import ProjectContext from "../contexts/projectContext";
 import { Autocomplete, TextField } from "@mui/material";
 import DeleteModalContext from "../contexts/deleteModalContext";
 import DeleteModal from "../components/DeleteModal";
+import ForceProjectListUpdateContext from "../contexts/forceProjectListUpdateContext";
 
 const Home = () => {
   const [myProjects, setMyProjects] = useState<IProject[]>();
@@ -23,6 +24,9 @@ const Home = () => {
   const { user } = useContext(UserContext);
   const { setProject } = useContext(ProjectContext);
   const { deleteModal, setDeleteModal } = useContext(DeleteModalContext);
+  const { forceProjectListUpdate, setForceProjectListUpdate } = useContext(
+    ForceProjectListUpdateContext
+  );
 
   const navigate = useNavigate();
 
@@ -78,6 +82,7 @@ const Home = () => {
     await getMyProjects();
     await getSharedProjects();
     await getPublicProjects();
+    if (forceProjectListUpdate === true) setForceProjectListUpdate(false);
   };
 
   const filterBySearch = (project: IProject) => {
@@ -128,6 +133,10 @@ const Home = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  useEffect(() => {
+    if (forceProjectListUpdate === true) getEveryProjects();
+  }, [forceProjectListUpdate]);
+
   return (
     <>
       <div>
@@ -168,29 +177,29 @@ const Home = () => {
             />
             <span>My Projects</span>
           </h2>
-          {showMyProjectList && myProjects && myProjects.length > 0 && (
-            <div className={styles.projectsContainer}>
-              {myProjects?.filter(filterBySearch).map((project) => (
-                <ProjectItem
-                  key={project.id}
-                  project={project}
-                  owned={true}
-                  getEveryProjects={getEveryProjects}
-                />
-              ))}
-              <article
-                className={styles.newProject}
-                onClick={openNewProjectModal}
-              >
-                <img
-                  src="/add-circle.svg"
-                  alt="add"
-                  className={styles.addIcon}
-                />
-                <span>new project</span>
-              </article>
-            </div>
-          )}
+
+          <div className={styles.projectsContainer}>
+            {showMyProjectList &&
+              myProjects &&
+              myProjects.length > 0 &&
+              myProjects
+                ?.filter(filterBySearch)
+                .map((project) => (
+                  <ProjectItem
+                    key={project.id}
+                    project={project}
+                    owned={true}
+                    getEveryProjects={getEveryProjects}
+                  />
+                ))}
+            <article
+              className={styles.newProject}
+              onClick={openNewProjectModal}
+            >
+              <img src="/add-circle.svg" alt="add" className={styles.addIcon} />
+              <span>new project</span>
+            </article>
+          </div>
         </section>
 
         <section className={styles.section}>

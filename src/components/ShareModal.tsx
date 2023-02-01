@@ -150,7 +150,7 @@ const ShareModal = ({ closeShareModal }: ShareModalProps) => {
                 <td>commentaire</td>
               </tr>
               {project.projectShare?.map((share) => (
-                <tr>
+                <tr key={share.id}>
                   <td>{share.userId.login}</td>
                   <td>
                     <Checkbox

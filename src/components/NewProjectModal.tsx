@@ -63,6 +63,7 @@ const NewProjectModal = ({
           }}
           value={projectName}
           onChange={handleProjectNameChange}
+          autoFocus
         />
         <TextField
           id="outlined-basic"
