@@ -94,8 +94,6 @@ export const projectAPI = {
         })
       ).data.getAllProjects as IProject[];
 
-      console.log("projectAPI.getall", projects);
-
       return (
         projects?.map((projects) => ({
           ...projects,
@@ -228,8 +226,6 @@ export const projectAPI = {
         },
       })
     ).data.addView as IProject[];
-
-    console.log("updatedProject", updatedProject);
 
     return updatedProject[0]?.nb_views;
   },

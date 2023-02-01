@@ -1,12 +1,35 @@
 import { api } from "./_graphQL";
 import { fileRequest } from "./fileRequest";
-import { IFiles } from "../interfaces/iFile";
+import { IFiles, FilesCodeData } from "../interfaces/iFile";
 
 type updateRes = {
-  success: boolean,
-}
+  success: boolean;
+};
+
+type ResGetFilesAndCode = {
+  getFilesByProjectId: IFiles[];
+  getCodeFiles: FilesCodeData[];
+};
 
 export const fileAPI = {
+  getAllFilesByProjectId: async (
+    projectId: string
+  ): Promise<ResGetFilesAndCode> => {
+    try {
+      const allProjectFiles = (
+        await api.query({
+          query: fileRequest.getFilesByProjectId,
+          variables: {
+            projectId: projectId,
+            getCodeFilesProjectId2: projectId,
+          },
+        })
+      ).data as ResGetFilesAndCode;
+      return allProjectFiles;
+    } catch (err) {
+      throw new Error("Erreur getAllFilesByProjectId");
+    }
+  },
   updateFileOnline: async (
     codeToPush: string,
     fileId: number,
@@ -24,21 +47,6 @@ export const fileAPI = {
       return JSON.parse(data.updateCodeFile) as updateRes;
     } catch (err) {
       console.error(err);
-    }
-  },
-  getAllFilesByProjectId: async (projectId: string): Promise<IFiles[]> => {
-    try {
-      const allProjectFiles = (
-        await api.query({
-          query: fileRequest.getFilesByProjectId,
-          variables: {
-            projectId: projectId,
-          },
-        })
-      ).data.getFilesByProjectId as IFiles[];
-      return allProjectFiles;
-    } catch (err) {
-      throw new Error("Erreur getAllFilesByProjectId");
     }
   },
 };

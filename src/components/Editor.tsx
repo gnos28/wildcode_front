@@ -1,19 +1,35 @@
 import { useEffect, useState, useRef } from "react";
 import styles from "./Editor.module.scss";
 import Editor, { useMonaco } from "@monaco-editor/react";
+import { FilesCodeData, IFiles } from "../interfaces/iFile";
 
 type EditeurProps = {
   sendMonaco: (code: string) => Promise<void>;
+  updateCode: (value: string) => void;
+  editorCode: string;
+  updateFileCodeOnline: (
+    code: string,
+    fileId: number,
+    projectId: number
+  ) => void;
+  fileId: number;
+  projectId: number;
 };
 
 type Theme = "light" | "vs-dark";
 
-const Editeur = ({ sendMonaco }: EditeurProps) => {
+const Editeur = ({
+  sendMonaco,
+  updateCode,
+  editorCode,
+  updateFileCodeOnline,
+  fileId,
+  projectId,
+}: EditeurProps) => {
   const [theme, setTheme] = useState<Theme>("light");
 
   // State Booléen pour savoir si le document est sauvegarder en ligne
   const [isSaveOnline, setIsSaveOnline] = useState(true);
-  const [editorCode, setEditorCode] = useState("");
 
   // const editor = document.getElementById("resize");
   // const [input, setInput] = useState<string>();
@@ -21,7 +37,7 @@ const Editeur = ({ sendMonaco }: EditeurProps) => {
 
   const getMonacoText = () => {
     setIsSaveOnline(false);
-    setEditorCode(editorRef.current.getValue());
+    updateCode(editorRef.current.getValue());
   };
 
   const monaco = useMonaco();
@@ -43,10 +59,13 @@ const Editeur = ({ sendMonaco }: EditeurProps) => {
     // do conditional chaining
     monaco?.languages.typescript.javascriptDefaults.setEagerModelSync(true);
     const willUpdate = setTimeout(() => {
+      console.log("editor code", editorCode);
+      updateFileCodeOnline(editorCode, fileId, projectId);
       setIsSaveOnline(true);
     }, 5000);
     return () => clearTimeout(willUpdate);
   }, [monaco, editorCode]);
+
 
   return (
     <div className={styles.container}>
@@ -61,13 +80,18 @@ const Editeur = ({ sendMonaco }: EditeurProps) => {
       </div>
 
       <div className={styles.resizable} id="resize">
-        <Editor
-          height="50vh"
-          defaultLanguage="javascript"
-          theme={theme}
-          onMount={handleEditorDidMount}
-          onChange={getMonacoText}
-        />
+        {fileId ? (
+          <Editor
+            height="50vh"
+            defaultLanguage="javascript"
+            theme={theme}
+            onMount={handleEditorDidMount}
+            onChange={getMonacoText}
+            defaultValue={editorCode}
+          />
+        ) : (
+          <p>Test</p>
+        )}
       </div>
     </div>
   );
