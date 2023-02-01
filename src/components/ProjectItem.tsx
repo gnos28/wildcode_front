@@ -26,7 +26,7 @@ const ProjectItem = ({
   const { deleteModal, setDeleteModal } = useContext(DeleteModalContext);
 
   const navigate = useNavigate();
-  const handleOpenProject = () => {
+  const handleOpenProject = async () => {
     setProject(project);
     projectAPI.addView(project.id);
     navigate("/Edit");

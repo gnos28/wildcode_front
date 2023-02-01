@@ -23,8 +23,6 @@ export const projectShareAPI = {
     write,
     read,
   }: CreateProps): Promise<number> => {
-    console.log("projectShareAPI.create");
-
     const newId = (
       await api.mutate({
         // mutation à refaire lorsque le back sera OP
@@ -64,8 +62,6 @@ export const projectShareAPI = {
     projectShareId,
     projectShare,
   }: UpdateProps): Promise<number> => {
-    console.log("projectShareAPI.create");
-
     const updatedId = (
       await api.mutate({
         mutation: gql`
