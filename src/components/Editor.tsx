@@ -1,7 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 import styles from "./Editor.module.scss";
 import Editor, { useMonaco } from "@monaco-editor/react";
-import { FilesCodeData, IFiles } from "../interfaces/iFile";
 
 type EditeurProps = {
   sendMonaco: (code: string) => Promise<void>;

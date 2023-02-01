@@ -12,7 +12,9 @@ const Edit = () => {
     ExecutedCode[] | undefined
   >(undefined);
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [projectFiles, setProjectFiles] = useState<IFiles[]>();
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [filesCodeArr, setFilesCodeArr] = useState<FilesCodeData[]>();
   const [usedFile, setUsedFile] = useState<FilesCodeData>();
 
@@ -54,6 +56,7 @@ const Edit = () => {
 
   useEffect(() => {
     getFilesInformations();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [project]);
 
   return (
