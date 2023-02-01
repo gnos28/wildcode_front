@@ -6,13 +6,12 @@ import React, {
   useState,
 } from "react";
 import ProjectContext from "../contexts/projectContext";
-import ShareModalContext from "../contexts/shareModalContext";
 import styles from "./ShareModal.module.scss";
 import modalStyles from "../styles/modal.module.scss";
 import { userAPI } from "../api/userAPI";
 import { IUser } from "../interfaces/IUser";
 import { projectShareAPI } from "../api/projectShareAPI";
-import { IProject, IProjectShare, UpdateProject } from "../interfaces/IProject";
+import { IProject, IProjectShare } from "../interfaces/IProject";
 import UserContext from "../contexts/userContext";
 import { projectAPI } from "../api/projectAPI";
 
@@ -21,10 +20,8 @@ type ShareModalProps = {
 };
 
 const ShareModal = ({ closeShareModal }: ShareModalProps) => {
-  const { shareModal } = useContext(ShareModalContext);
   const { project, setProject } = useContext(ProjectContext);
   const { user } = useContext(UserContext);
-
   const [userList, setUserList] = useState<IUser[]>([]);
   const [selectValue, setSelectValue] = useState("");
 

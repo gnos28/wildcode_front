@@ -1,5 +1,5 @@
 import { api } from "./_graphQL";
-import { IProject, CreateProject, UpdateProject } from "../interfaces/IProject";
+import { IProject, CreateProject } from "../interfaces/IProject";
 import { gql } from "@apollo/client";
 
 export const projectAPI = {

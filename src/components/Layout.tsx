@@ -2,8 +2,6 @@ import { ReactNode, useContext } from "react";
 import ShareModalContext from "../contexts/shareModalContext";
 import styles from "./Layout.module.scss";
 import ShareModal from "./ShareModal";
-import DeleteModal from "./DeleteModal";
-import DeleteModalContext from "../contexts/deleteModalContext";
 
 type Children = { children: ReactNode };
 

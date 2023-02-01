@@ -50,7 +50,6 @@ const Home = () => {
   };
 
   const handleSearch = (event: any, newValue: string | null) => {
-    console.log("newValue", newValue);
     setSearchValue(newValue || undefined);
   };
 
