@@ -65,8 +65,11 @@ $borderRadius: 10px;
     }
 
     .buttonContainer {
-      width: auto;
+      display: flex;
+      flex-direction: row-reverse;
+      width: 100%;
       align-self: flex-end;
+      justify-content: space-between;
     }
   }
 }

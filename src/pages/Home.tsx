@@ -7,6 +7,9 @@ import { IProject, CreateProject } from "../interfaces/IProject";
 import NewProjectModal from "../components/NewProjectModal";
 import UserContext from "../contexts/userContext";
 import ProjectContext from "../contexts/projectContext";
+import { Autocomplete, TextField } from "@mui/material";
+import DeleteModalContext from "../contexts/deleteModalContext";
+import DeleteModal from "../components/DeleteModal";
 
 const Home = () => {
   const [myProjects, setMyProjects] = useState<IProject[]>();
@@ -16,8 +19,10 @@ const Home = () => {
   const [showMyProjectList, setShowMyProjectList] = useState(true);
   const [showSharedProjectList, setShowSharedProjectList] = useState(true);
   const [showAllProjectList, setShowAllProjectList] = useState(true);
+  const [searchValue, setSearchValue] = useState<string | undefined>(undefined);
   const { user } = useContext(UserContext);
   const { setProject } = useContext(ProjectContext);
+  const { deleteModal, setDeleteModal } = useContext(DeleteModalContext);
 
   const navigate = useNavigate();
 
@@ -29,6 +34,10 @@ const Home = () => {
     setShowNewProjectModal(false);
   };
 
+  const closeDeleteModal = () => {
+    setDeleteModal({});
+  };
+
   const token = localStorage.getItem("token");
 
   const handleArrowClick = (
@@ -38,6 +47,11 @@ const Home = () => {
     if (list === "sharedProjects")
       setShowSharedProjectList(!showSharedProjectList);
     if (list === "allProjects") setShowAllProjectList(!showAllProjectList);
+  };
+
+  const handleSearch = (event: any, newValue: string | null) => {
+    console.log("newValue", newValue);
+    setSearchValue(newValue || undefined);
   };
 
   const getMyProjects = async () => {
@@ -67,6 +81,42 @@ const Home = () => {
     await getPublicProjects();
   };
 
+  const filterBySearch = (project: IProject) => {
+    if (!searchValue) return true;
+
+    const description = project.description.toLowerCase();
+    const name = project.name.toLowerCase();
+    let rawLogin = project.userId?.login;
+    let login: string | undefined = undefined;
+    if (rawLogin) login = project.userId?.login.toLowerCase();
+
+    return (
+      login?.includes(searchValue) ||
+      name.includes(searchValue) ||
+      description.includes(searchValue)
+    );
+  };
+
+  const getSearchFields = () => {
+    if (myProjects && sharedProjects && publicProjects) {
+      return [
+        ...new Set(
+          [...myProjects, ...sharedProjects, ...publicProjects]
+            .map((pro) => [
+              pro.name,
+              ...pro.description.split(" "),
+              pro.userId?.login,
+            ])
+            .flat()
+            .filter((word) => word && word.length > 2)
+            .map((word) => (word ? word.toLowerCase() : word)) as string[]
+        ),
+      ].sort((wordA, wordB) => (wordA > wordB ? 1 : wordA < wordB ? -1 : 0));
+    }
+
+    return [];
+  };
+
   useEffect(() => {
     if (!token) {
       navigate("/login");
@@ -76,11 +126,37 @@ const Home = () => {
   useEffect(() => {
     getEveryProjects();
     setProject({});
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
     <>
       <div>
+        <div>
+          <Autocomplete
+            value={searchValue}
+            onChange={handleSearch}
+            size="small"
+            options={getSearchFields()}
+            sx={{
+              width: "auto",
+              height: "auto",
+              fontSize: "12px",
+              font: "initial",
+              backgroundColor: "white",
+            }}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                label="recherche"
+                data-testid={`autoCompleteTextField`}
+              />
+            )}
+            ListboxProps={{ style: { fontSize: "12px" } }}
+            data-testid={`autoComplete`}
+          />
+        </div>
+
         <section className={styles.section}>
           <h2 onClick={() => handleArrowClick("myProjects")}>
             <img
@@ -95,7 +171,7 @@ const Home = () => {
           </h2>
           {showMyProjectList && myProjects && myProjects.length > 0 && (
             <div className={styles.projectsContainer}>
-              {myProjects?.map((project) => (
+              {myProjects?.filter(filterBySearch).map((project) => (
                 <ProjectItem
                   key={project.id}
                   project={project}
@@ -134,7 +210,7 @@ const Home = () => {
             sharedProjects &&
             sharedProjects.length > 0 && (
               <div className={styles.projectsContainer}>
-                {sharedProjects?.map((project) => (
+                {sharedProjects?.filter(filterBySearch).map((project) => (
                   <ProjectItem
                     key={project.id}
                     project={project}
@@ -163,7 +239,8 @@ const Home = () => {
             publicProjects.length > 0 && (
               <div className={styles.projectsContainer}>
                 {publicProjects
-                  ?.filter((project) => project.userId?.id === user.id)
+                  ?.filter(filterBySearch)
+                  .filter((project) => project.userId?.id !== user.id)
                   .map((project) => (
                     <ProjectItem
                       key={project.id}
@@ -180,6 +257,12 @@ const Home = () => {
         <NewProjectModal
           createNewProject={createNewProject}
           closeNewProjectModal={closeNewProjectModal}
+        />
+      )}
+      {deleteModal.projectId !== undefined && (
+        <DeleteModal
+          closeDeleteModal={closeDeleteModal}
+          getEveryProjects={getEveryProjects}
         />
       )}
     </>

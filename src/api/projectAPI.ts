@@ -23,6 +23,7 @@ export const projectAPI = {
                 id
                 userId {
                   id
+                  login
                 }
               }
               projectShare {
@@ -87,6 +88,7 @@ export const projectAPI = {
                 nb_views
                 userId {
                   id
+                  login
                 }
               }
             }
@@ -140,6 +142,7 @@ export const projectAPI = {
                 nb_views
                 userId {
                   id
+                  login
                 }
               }
             }
@@ -191,6 +194,7 @@ export const projectAPI = {
                 nb_views
                 userId {
                   id
+                  login
                 }
               }
             }
@@ -248,6 +252,7 @@ export const projectAPI = {
                 id
                 userId {
                   id
+                  login
                 }
               }
               projectShare {
@@ -295,6 +300,7 @@ export const projectAPI = {
                 id
                 userId {
                   id
+                  login
                 }
               }
               projectShare {
@@ -346,5 +352,27 @@ export const projectAPI = {
     ).data;
 
     return updatedProjectId;
+  },
+
+  delete: async (rawProjectId: number | string): Promise<number> => {
+    let projectId =
+      typeof rawProjectId === "string" ? parseInt(rawProjectId) : rawProjectId;
+
+    const deletedProjectId = (
+      await api.mutate({
+        mutation: gql`
+          mutation Mutation($projectId: Float!) {
+            deleteProject(projectId: $projectId) {
+              id
+            }
+          }
+        `,
+        variables: {
+          projectId,
+        },
+      })
+    ).data.deleteProject;
+
+    return deletedProjectId;
   },
 };
