@@ -1,5 +1,5 @@
 import { api } from "./_graphQL";
-import { IProject, CreateProject } from "../interfaces/IProject";
+import { IProject, CreateProject, UpdateProject } from "../interfaces/IProject";
 import { gql } from "@apollo/client";
 
 export const projectAPI = {
@@ -316,5 +316,31 @@ export const projectAPI = {
     ).data.removeLike as IProject[];
 
     return updatedProject[0]?.like?.length || 0;
+  },
+
+  update: async (
+    rawProjectId: number | string,
+    project: Partial<IProject>
+  ): Promise<number> => {
+    let projectId =
+      typeof rawProjectId === "string" ? parseInt(rawProjectId) : rawProjectId;
+
+    const updatedProjectId = (
+      await api.mutate({
+        mutation: gql`
+          mutation Mutation($projectId: Float!, $project: iProject!) {
+            updateProject(projectId: $projectId, project: $project) {
+              id
+            }
+          }
+        `,
+        variables: {
+          projectId,
+          project,
+        },
+      })
+    ).data;
+
+    return updatedProjectId;
   },
 };

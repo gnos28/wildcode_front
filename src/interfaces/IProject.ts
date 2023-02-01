@@ -36,3 +36,9 @@ export type CreateProject = {
   description: string;
   isPublic: boolean;
 };
+
+export type UpdateProject = {
+  name: string;
+  description: string;
+  public: boolean;
+};
