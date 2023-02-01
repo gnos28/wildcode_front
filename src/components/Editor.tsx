@@ -18,14 +18,7 @@ type EditeurProps = {
 
 type Theme = "light" | "vs-dark";
 
-const Editeur = ({
-  sendMonaco,
-  updateCode,
-  editorCode,
-  updateFileCodeOnline,
-  fileId,
-  projectId,
-}: EditeurProps) => {
+const Editeur = (props: EditeurProps) => {
   const [theme, setTheme] = useState<Theme>("light");
 
   // State Booléen pour savoir si le document est sauvegarder en ligne
@@ -37,7 +30,7 @@ const Editeur = ({
 
   const getMonacoText = () => {
     setIsSaveOnline(false);
-    updateCode(editorRef.current.getValue());
+    props.updateCode(editorRef.current.getValue());
   };
 
   const monaco = useMonaco();
@@ -52,20 +45,22 @@ const Editeur = ({
   const execute = () => {
     const code = editorRef.current.getValue();
 
-    if (code) sendMonaco(code);
+    if (code) props.sendMonaco(code);
   };
 
   useEffect(() => {
     // do conditional chaining
     monaco?.languages.typescript.javascriptDefaults.setEagerModelSync(true);
     const willUpdate = setTimeout(() => {
-      console.log("editor code", editorCode);
-      updateFileCodeOnline(editorCode, fileId, projectId);
+      props.updateFileCodeOnline(
+        props.editorCode,
+        props.fileId,
+        props.projectId
+      );
       setIsSaveOnline(true);
     }, 5000);
     return () => clearTimeout(willUpdate);
-  }, [monaco, editorCode]);
-
+  }, [monaco, props.editorCode]);
 
   return (
     <div className={styles.container}>
@@ -80,14 +75,14 @@ const Editeur = ({
       </div>
 
       <div className={styles.resizable} id="resize">
-        {fileId ? (
+        {props.fileId ? (
           <Editor
             height="50vh"
             defaultLanguage="javascript"
             theme={theme}
             onMount={handleEditorDidMount}
             onChange={getMonacoText}
-            defaultValue={editorCode}
+            defaultValue={props.editorCode}
           />
         ) : (
           <p>Test</p>
