@@ -1,5 +1,5 @@
 import { api } from "./_graphQL";
-import { IProject, CreateProject, UpdateProject } from "../interfaces/IProject";
+import { IProject, CreateProject } from "../interfaces/IProject";
 import { gql } from "@apollo/client";
 
 export const projectAPI = {
@@ -226,8 +226,6 @@ export const projectAPI = {
       return [];
     }
   },
-<<<<<<< HEAD
-=======
 
   addView: async (rawProjectId: number | string): Promise<number> => {
     let projectId =
@@ -340,9 +338,6 @@ export const projectAPI = {
 
     return updatedProject[0]?.like?.length || 0;
   },
-<<<<<<< HEAD
->>>>>>> 566f283c90a7c037831f03b6b19561a172a63aca
-=======
 
   update: async (
     rawProjectId: number | string,
@@ -369,5 +364,4 @@ export const projectAPI = {
 
     return updatedProjectId;
   },
->>>>>>> 30bccb6bf632cb11e40e55ca81cf9b6849092744
 };

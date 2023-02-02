@@ -13,14 +13,11 @@ const Home = () => {
   const [sharedProjects, setSharedProjects] = useState<IProject[]>();
   const [publicProjects, setPublicProjects] = useState<IProject[]>();
   const [showNewProjectModal, setShowNewProjectModal] = useState(false);
-<<<<<<< HEAD
-=======
   const [showMyProjectList, setShowMyProjectList] = useState(true);
   const [showSharedProjectList, setShowSharedProjectList] = useState(true);
   const [showAllProjectList, setShowAllProjectList] = useState(true);
   const { user } = useContext(UserContext);
   const { setProject } = useContext(ProjectContext);
->>>>>>> 30bccb6bf632cb11e40e55ca81cf9b6849092744
 
   const navigate = useNavigate();
 
@@ -33,6 +30,15 @@ const Home = () => {
   };
 
   const token = localStorage.getItem("token");
+
+  const handleArrowClick = (
+    list: "myProjects" | "sharedProjects" | "allProjects"
+  ) => {
+    if (list === "myProjects") setShowMyProjectList(!showMyProjectList);
+    if (list === "sharedProjects")
+      setShowSharedProjectList(!showSharedProjectList);
+    if (list === "allProjects") setShowAllProjectList(!showAllProjectList);
+  };
 
   const getMyProjects = async () => {
     const projects = await projectAPI.getAll();
@@ -76,34 +82,18 @@ const Home = () => {
     <>
       <div>
         <section className={styles.section}>
-          <h2>
+          <h2 onClick={() => handleArrowClick("myProjects")}>
             <img
               src="/triangle.svg"
               alt="triangle"
-              className={styles.arrowDown}
+              className={[
+                styles.arrowDown,
+                showMyProjectList ? null : styles.arrowLeft,
+              ].join(" ")}
             />
             <span>My Projects</span>
           </h2>
-<<<<<<< HEAD
-<<<<<<< HEAD
-
-          <div className={styles.projectsContainer}>
-            {myProjects?.map((project) => (
-              <ProjectItem key={project.id} project={project} owned={true} />
-            ))}
-            <article
-              className={styles.newProject}
-              onClick={openNewProjectModal}
-            >
-              <img src="/add-circle.svg" alt="add" className={styles.addIcon} />
-              <span>new project</span>
-            </article>
-          </div>
-=======
-          {showMyProjectList && (
-=======
           {showMyProjectList && myProjects && myProjects.length > 0 && (
->>>>>>> 30bccb6bf632cb11e40e55ca81cf9b6849092744
             <div className={styles.projectsContainer}>
               {myProjects?.map((project) => (
                 <ProjectItem
@@ -126,40 +116,20 @@ const Home = () => {
               </article>
             </div>
           )}
->>>>>>> 566f283c90a7c037831f03b6b19561a172a63aca
         </section>
 
         <section className={styles.section}>
-          <h2>
+          <h2 onClick={() => handleArrowClick("sharedProjects")}>
             <img
               src="/triangle.svg"
               alt="triangle"
-              className={styles.arrowDown}
+              className={[
+                styles.arrowDown,
+                showSharedProjectList ? null : styles.arrowLeft,
+              ].join(" ")}
             />
             <span>Projects shared with me</span>
           </h2>
-<<<<<<< HEAD
-<<<<<<< HEAD
-          <div className={styles.projectsContainer}>
-            {sharedProjects?.map((project) => (
-              <ProjectItem key={project.id} project={project} owned={false} />
-            ))}
-          </div>
-=======
-          {showSharedProjectList && (
-            <div className={styles.projectsContainer}>
-              {sharedProjects?.map((project) => (
-                <ProjectItem
-                  key={project.id}
-                  project={project}
-                  owned={false}
-                  getEveryProjects={getEveryProjects}
-                />
-              ))}
-            </div>
-          )}
->>>>>>> 566f283c90a7c037831f03b6b19561a172a63aca
-=======
           {showSharedProjectList &&
             sharedProjects &&
             sharedProjects.length > 0 && (
@@ -174,46 +144,26 @@ const Home = () => {
                 ))}
               </div>
             )}
->>>>>>> 30bccb6bf632cb11e40e55ca81cf9b6849092744
         </section>
 
         <section className={styles.section}>
-          <h2>
+          <h2 onClick={() => handleArrowClick("allProjects")}>
             <img
               src="/triangle.svg"
               alt="triangle"
-              className={styles.arrowDown}
+              className={[
+                styles.arrowDown,
+                showAllProjectList ? null : styles.arrowLeft,
+              ].join(" ")}
             />
             <span>All public projects</span>
           </h2>
-<<<<<<< HEAD
-<<<<<<< HEAD
-          <div className={styles.projectsContainer}>
-            {publicProjects?.map((project) => (
-              <ProjectItem key={project.id} project={project} owned={false} />
-            ))}
-          </div>
-=======
-          {showAllProjectList && (
-            <div className={styles.projectsContainer}>
-              {publicProjects?.map((project) => (
-                <ProjectItem
-                  key={project.id}
-                  project={project}
-                  owned={false}
-                  getEveryProjects={getEveryProjects}
-                />
-              ))}
-            </div>
-          )}
->>>>>>> 566f283c90a7c037831f03b6b19561a172a63aca
-=======
           {showAllProjectList &&
             publicProjects &&
             publicProjects.length > 0 && (
               <div className={styles.projectsContainer}>
                 {publicProjects
-                  ?.filter((project) => project.userId?.id === user.id)
+                  ?.filter((project) => project.userId?.id !== user.id)
                   .map((project) => (
                     <ProjectItem
                       key={project.id}
@@ -224,7 +174,6 @@ const Home = () => {
                   ))}
               </div>
             )}
->>>>>>> 30bccb6bf632cb11e40e55ca81cf9b6849092744
         </section>
       </div>
       {showNewProjectModal === true && (

@@ -3,6 +3,7 @@ import Editor from "../components/Editor";
 import Console from "../components/Console";
 import { executeCodeAPI, ExecutedCode } from "../api/executeCodeAPI";
 import styles from "./Edit.module.scss";
+import CommentSection from "../components/Comment";
 
 const Edit = () => {
   const [consoleResult, setConsoleResult] = useState<
@@ -24,6 +25,7 @@ const Edit = () => {
         <img src="/grab.svg" alt="resize" draggable={false} />
       </div>
       <Console consoleResult={consoleResult} />
+      <CommentSection />
     </div>
   );
 };

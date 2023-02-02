@@ -6,12 +6,9 @@ import Button from "@mui/material/Button/Button";
 import { userAPI } from "../api/userAPI";
 import { CreateUser } from "../interfaces/IUser";
 import { authAPI } from "../api/authAPI";
-<<<<<<< HEAD
-=======
 import UserContext from "../contexts/userContext";
 import Alert from "@mui/material/Alert";
 import Stack from "@mui/material/Stack";
->>>>>>> 566f283c90a7c037831f03b6b19561a172a63aca
 
 const SignIn = () => {
   const [email, setEmail] = useState("");

@@ -24,14 +24,10 @@ const ProjectItem = ({
   const navigate = useNavigate();
   const handleOpenProject = () => {
     setProject(project);
-
+    projectAPI.addView(project.id);
     navigate("/Edit");
   };
 
-<<<<<<< HEAD
-  const handleDelete = async () => {
-    await projectAPI.deleteProject(project.id);
-=======
   const toggleLike = async () => {
     const userId = user?.id;
 
@@ -47,7 +43,6 @@ const ProjectItem = ({
     else await projectAPI.removeLike(project.id);
 
     await getEveryProjects();
->>>>>>> 566f283c90a7c037831f03b6b19561a172a63aca
   };
 
   return (
@@ -64,7 +59,7 @@ const ProjectItem = ({
           </button>
           {owned === true && (
             <button
-              onClick={handleDelete}
+              onClick={() => {}}
               className={[styles.button, styles.delete].join(" ")}
             >
               <img src="/trash.svg" alt="delete" draggable={false} />
