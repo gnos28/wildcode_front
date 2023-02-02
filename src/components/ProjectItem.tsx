@@ -23,7 +23,7 @@ const ProjectItem = ({
   const { setProject } = useContext(ProjectContext);
   const { user } = useContext(UserContext);
   const { setShareModal } = useContext(ShareModalContext);
-  const { deleteModal, setDeleteModal } = useContext(DeleteModalContext);
+  const { setDeleteModal } = useContext(DeleteModalContext);
 
   const navigate = useNavigate();
   const handleOpenProject = async () => {

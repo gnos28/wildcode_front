@@ -1,6 +1,5 @@
 import {
   Autocomplete,
-  Checkbox,
   Switch,
   TextField,
   ToggleButton,
@@ -40,8 +39,6 @@ const ShareModal = ({ closeShareModal }: ShareModalProps) => {
     rawShareValue: string[],
     projectShareId: number
   ) => {
-    console.log("handleUpdateSharingMode", rawShareValue, projectShareId);
-
     let shareValue = rawShareValue;
     if (rawShareValue.includes("write") && !rawShareValue.includes("comment"))
       shareValue = ["read"];
@@ -53,8 +50,6 @@ const ShareModal = ({ closeShareModal }: ShareModalProps) => {
     projectShare.write = shareValue.includes("write");
     projectShare.comment = projectShare.write || shareValue.includes("comment");
     projectShare.read = projectShare.comment || shareValue.includes("read");
-
-    console.log("projectShare", projectShare);
 
     await projectShareAPI.update({ projectShareId, projectShare });
 
