@@ -97,7 +97,7 @@ const ProjectItem = ({
         </div>
 
         <div className={styles.footer}>
-          {owned === true || project.isPublic === true ? (
+          {owned === true ? (
             <button
               onClick={handleToggleShareModal}
               className={[styles.button, styles.share].join(" ")}
