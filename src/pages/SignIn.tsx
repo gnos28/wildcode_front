@@ -24,10 +24,14 @@ const SignIn = () => {
   const handleLogin = async () => {
     const { token, userId } = await authAPI.getToken(email, password);
 
-    setUser({ ...user, id: userId.toString() });
-
     localStorage.setItem("userId", userId.toString());
     localStorage.setItem("token", token);
+
+    const user = (await userAPI.getAll()).filter(
+      (u) => u.id === userId.toString()
+    )[0];
+
+    setUser({ ...user, id: userId.toString() });
 
     navigate("/");
   };

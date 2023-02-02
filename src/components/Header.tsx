@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import styles from "./Header.module.scss";
 import ProjectContext from "../contexts/projectContext";
@@ -8,12 +8,18 @@ import { projectAPI } from "../api/projectAPI";
 import { ILike } from "../interfaces/IProject";
 import ShareModalContext from "../contexts/shareModalContext";
 import { isLiked } from "../utils/isLiked";
+import { Avatar, Tooltip } from "@mui/material";
+import { userAPI } from "../api/userAPI";
+import ForceProjectListUpdateContext from "../contexts/forceProjectListUpdateContext";
 
 const Header = () => {
   const [isAuth, setIsAuth] = useState(false);
   const { project, setProject } = useContext(ProjectContext);
   const { user, setUser } = useContext(UserContext);
   const { setShareModal } = useContext(ShareModalContext);
+  const { setForceProjectListUpdate } = useContext(
+    ForceProjectListUpdateContext
+  );
   const client = useApolloClient();
   const navigate = useNavigate();
 
@@ -24,6 +30,20 @@ const Header = () => {
     const projectId = project.id;
 
     if (projectId) setShareModal({ projectId: parseInt(projectId, 10) });
+  };
+
+  const getInitialFromLogin = (login: string | undefined) => {
+    if (!login) return " ";
+
+    const splitted = login.split(" ");
+
+    if (splitted.length > 1) {
+      return splitted
+        .map((split) => split[0])
+        .join("")
+        .slice(0, 2)
+        .toUpperCase();
+    } else return login.slice(0, 2).toUpperCase();
   };
 
   const toggleLike = async () => {
@@ -70,6 +90,7 @@ const Header = () => {
     localStorage.setItem("userId", "");
     setUser({});
     setProject({});
+    setForceProjectListUpdate(true);
 
     client.resetStore();
     navigate("/login");
@@ -86,7 +107,25 @@ const Header = () => {
     if (userId) {
       setUser({ ...user, id: userId });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userId]);
+
+  const updateUserContext = async () => {
+    const _userId = user.id;
+
+    if (user.login === undefined && _userId) {
+      const reqUser = (await userAPI.getAll()).filter(
+        (u) => u.id === _userId.toString()
+      )[0];
+
+      setUser({ ...reqUser, id: _userId.toString() });
+    }
+  };
+
+  useEffect(() => {
+    updateUserContext();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user]);
 
   return (
     <>
@@ -128,12 +167,19 @@ const Header = () => {
         <div className={[styles.header, styles.headerRight].join(" ")}>
           <button onClick={signOut}>Logout</button>
           <NavLink to="/Profil">
-            <img
-              src="/people.svg"
-              alt="people"
-              draggable={false}
-              className={styles.img}
-            />
+            <Tooltip title={`logged in as ${user.login}`} arrow>
+              <Avatar
+                sx={{
+                  bgcolor: "red",
+                  width: 26,
+                  height: 26,
+                  fontSize: 12,
+                  fontWeight: "bold",
+                }}
+              >
+                {getInitialFromLogin(user.login)}
+              </Avatar>
+            </Tooltip>
           </NavLink>
 
           {/* <NavLink to="/Profil">

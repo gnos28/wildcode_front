@@ -1,9 +1,7 @@
-import React, { BaseSyntheticEvent, useState } from "react";
-import { CreateUser } from "../interfaces/IUser";
+import { BaseSyntheticEvent, useState } from "react";
 import modalStyles from "../styles/modal.module.scss";
 import styles from "./RegisterModal.module.scss";
 import { Button, TextField } from "@mui/material";
-import { userAPI } from "../api/userAPI";
 
 type RegisterModalProps = {
   closeModal: () => void;
