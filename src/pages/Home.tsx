@@ -70,8 +70,6 @@ const Home = () => {
   const getPublicProjects = async () => {
     const projects = await projectAPI.getPublic();
 
-    console.log("getPublicProjects", projects);
-
     setPublicProjects(projects);
   };
 

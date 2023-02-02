@@ -23,7 +23,7 @@ const ProjectItem = ({
   const { setProject } = useContext(ProjectContext);
   const { user } = useContext(UserContext);
   const { setShareModal } = useContext(ShareModalContext);
-  const { deleteModal, setDeleteModal } = useContext(DeleteModalContext);
+  const { setDeleteModal } = useContext(DeleteModalContext);
 
   const navigate = useNavigate();
   const handleOpenProject = async () => {
@@ -97,7 +97,7 @@ const ProjectItem = ({
         </div>
 
         <div className={styles.footer}>
-          {owned === true || project.isPublic === true ? (
+          {owned === true ? (
             <button
               onClick={handleToggleShareModal}
               className={[styles.button, styles.share].join(" ")}
