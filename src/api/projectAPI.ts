@@ -23,6 +23,7 @@ export const projectAPI = {
                 id
                 userId {
                   id
+                  login
                 }
               }
               projectShare {
@@ -87,14 +88,13 @@ export const projectAPI = {
                 nb_views
                 userId {
                   id
+                  login
                 }
               }
             }
           `,
         })
       ).data.getAllProjects as IProject[];
-
-      console.log("projectAPI.getall", projects);
 
       return (
         projects?.map((projects) => ({
@@ -140,6 +140,7 @@ export const projectAPI = {
                 nb_views
                 userId {
                   id
+                  login
                 }
               }
             }
@@ -181,9 +182,14 @@ export const projectAPI = {
       const projects = (
         await api.query({
           query: gql`
-            query getPublicProjects {
+            query Query {
               getPublicProjects {
+                id
+                name
                 description
+                id_storage_number
+                isPublic
+                nb_views
                 like {
                   id
                   userId {
@@ -197,23 +203,19 @@ export const projectAPI = {
                     id
                   }
                   id
-                  comment
                   read
+                  comment
                   write
                 }
-                id
-                id_storage_number
-                isPublic
-                name
-                nb_views
                 userId {
                   id
+                  login
                 }
               }
             }
           `,
         })
-      ).data?.getPublicProjects as IProject[];
+      ).data.getPublicProjects as IProject[];
 
       return (
         projects?.map((projects) => ({
@@ -246,8 +248,6 @@ export const projectAPI = {
       })
     ).data.addView as IProject[];
 
-    console.log("updatedProject", updatedProject);
-
     return updatedProject[0]?.nb_views;
   },
 
@@ -265,6 +265,7 @@ export const projectAPI = {
                 id
                 userId {
                   id
+                  login
                 }
               }
               projectShare {
@@ -312,6 +313,7 @@ export const projectAPI = {
                 id
                 userId {
                   id
+                  login
                 }
               }
               projectShare {
@@ -363,5 +365,27 @@ export const projectAPI = {
     ).data;
 
     return updatedProjectId;
+  },
+
+  delete: async (rawProjectId: number | string): Promise<number> => {
+    let projectId =
+      typeof rawProjectId === "string" ? parseInt(rawProjectId) : rawProjectId;
+
+    const deletedProjectId = (
+      await api.mutate({
+        mutation: gql`
+          mutation Mutation($projectId: Float!) {
+            deleteProject(projectId: $projectId) {
+              id
+            }
+          }
+        `,
+        variables: {
+          projectId,
+        },
+      })
+    ).data.deleteProject;
+
+    return deletedProjectId;
   },
 };

@@ -1,3 +1,4 @@
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import styles from "./NewProjectModal.module.scss";
 import modalStyles from "../styles/modal.module.scss";
 import TextField from "@mui/material/TextField";
@@ -65,8 +66,12 @@ const NewProjectModal = ({
           }}
           value={projectName}
           onChange={handleProjectNameChange}
+<<<<<<< HEAD
           error={isFormInvalid}
           helperText={isFormInvalid && "empty field"}
+=======
+          autoFocus
+>>>>>>> 75e8c735620027d54b1c73eb18dfbc3e72f6f990
         />
 
         <TextField

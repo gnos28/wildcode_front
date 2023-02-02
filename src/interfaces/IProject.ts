@@ -27,7 +27,7 @@ export type IProject = {
   projectShare?: IProjectShare[];
   nb_views: number;
   file: { language: string }[];
-  userId?: { id: number };
+  userId?: Omit<IUserId, "email">;
 };
 
 export type CreateProject = {

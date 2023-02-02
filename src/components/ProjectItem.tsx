@@ -6,6 +6,8 @@ import { useContext } from "react";
 import { projectAPI } from "../api/projectAPI";
 import UserContext from "../contexts/userContext";
 import { isLiked } from "../utils/isLiked";
+import ShareModalContext from "../contexts/shareModalContext";
+import DeleteModalContext from "../contexts/deleteModalContext";
 
 type ProjectItemProps = {
   project: IProject;
@@ -20,12 +22,32 @@ const ProjectItem = ({
 }: ProjectItemProps) => {
   const { setProject } = useContext(ProjectContext);
   const { user } = useContext(UserContext);
+  const { setShareModal } = useContext(ShareModalContext);
+  const { deleteModal, setDeleteModal } = useContext(DeleteModalContext);
 
   const navigate = useNavigate();
-  const handleOpenProject = () => {
+  const handleOpenProject = async () => {
     setProject(project);
     projectAPI.addView(project.id);
     navigate("/Edit");
+  };
+
+  const handleToggleShareModal = () => {
+    const projectId = project.id;
+
+    if (projectId) {
+      setProject(project);
+      setShareModal({ projectId: parseInt(projectId, 10) });
+    }
+  };
+
+  const handleToggleDeleteModal = () => {
+    const projectId = project.id;
+
+    if (projectId) {
+      setProject(project);
+      setDeleteModal({ projectId: parseInt(projectId, 10) });
+    }
   };
 
   const toggleLike = async () => {
@@ -59,7 +81,7 @@ const ProjectItem = ({
           </button>
           {owned === true && (
             <button
-              onClick={() => {}}
+              onClick={handleToggleDeleteModal}
               className={[styles.button, styles.delete].join(" ")}
             >
               <img src="/trash.svg" alt="delete" draggable={false} />
@@ -77,7 +99,7 @@ const ProjectItem = ({
         <div className={styles.footer}>
           {owned === true || project.isPublic === true ? (
             <button
-              onClick={() => {}}
+              onClick={handleToggleShareModal}
               className={[styles.button, styles.share].join(" ")}
             >
               <img src="/share.svg" alt="share" draggable={false} />
