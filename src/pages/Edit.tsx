@@ -77,7 +77,7 @@ const Edit = () => {
         <img src="/grab.svg" alt="resize" draggable={false} />
       </div>
       <Console consoleResult={consoleResult} />
-      <CommentSection />
+      {/* <CommentSection /> */}
     </div>
   );
 };

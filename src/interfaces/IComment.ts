@@ -19,4 +19,5 @@ export type IComment = {
   is_report: number;
   line_number: number;
   resolved: boolean;
+  comment_date: Date;
 };

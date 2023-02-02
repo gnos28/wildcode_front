@@ -20,7 +20,6 @@ const NewProjectModal = ({
   const [isPublic, setIsPublic] = useState(true);
   const [projectName, setProjectName] = useState<string>("");
   const [projectDescription, setProjectDescription] = useState<string>("");
-  const [isFormInvalid, setIsFormInvalid] = useState(false);
 
   const handleModalClick = (e: BaseSyntheticEvent) => {
     e.stopPropagation();
@@ -48,9 +47,8 @@ const NewProjectModal = ({
       description: projectDescription,
       isPublic,
     };
-    return project.name !== ""
-      ? createNewProject(project)
-      : setIsFormInvalid(true);
+
+    createNewProject(project);
   };
 
   return (
@@ -66,14 +64,8 @@ const NewProjectModal = ({
           }}
           value={projectName}
           onChange={handleProjectNameChange}
-<<<<<<< HEAD
-          error={isFormInvalid}
-          helperText={isFormInvalid && "empty field"}
-=======
           autoFocus
->>>>>>> 75e8c735620027d54b1c73eb18dfbc3e72f6f990
         />
-
         <TextField
           id="outlined-basic"
           label="Description du projet"
