@@ -8,6 +8,7 @@ import UserContext from "../contexts/userContext";
 import { isLiked } from "../utils/isLiked";
 import ShareModalContext from "../contexts/shareModalContext";
 import DeleteModalContext from "../contexts/deleteModalContext";
+import EditOffIcon from "@mui/icons-material/EditOff";
 
 type ProjectItemProps = {
   project: IProject;
@@ -77,7 +78,13 @@ const ProjectItem = ({
             onClick={handleOpenProject}
             className={[styles.button, styles.edit].join(" ")}
           >
-            <img src="/pen.svg" alt="edit" draggable={false} />
+            {owned ||
+            (project.projectShare?.filter((pshare) => pshare.write).length ||
+              []) > 0 ? (
+              <img src="/pen.svg" alt="edit" draggable={false} />
+            ) : (
+              <EditOffIcon />
+            )}
           </button>
           {owned === true && (
             <button
