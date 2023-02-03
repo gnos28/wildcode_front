@@ -50,7 +50,6 @@ const RegisterModal = ({ closeModal, registerNewUser }: RegisterModalProps) => {
             onChange={(e) => {
               setLoginInscription(e.target.value);
             }}
-            autoFocus
           />
           <TextField
             id="outlined-basic"

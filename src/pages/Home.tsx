@@ -129,7 +129,7 @@ const Home = () => {
   });
 
   useEffect(() => {
-    getEveryProjects();
+    setForceProjectListUpdate(true);
     setProject({});
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -181,26 +181,33 @@ const Home = () => {
           </h2>
 
           <div className={styles.projectsContainer}>
-            {showMyProjectList &&
-              myProjects &&
-              myProjects.length > 0 &&
-              myProjects
-                ?.filter(filterBySearch)
-                .map((project) => (
-                  <ProjectItem
-                    key={project.id}
-                    project={project}
-                    owned={true}
-                    getEveryProjects={getEveryProjects}
+            {showMyProjectList === true && (
+              <>
+                {myProjects &&
+                  myProjects.length > 0 &&
+                  myProjects
+                    ?.filter(filterBySearch)
+                    .map((project) => (
+                      <ProjectItem
+                        key={project.id}
+                        project={project}
+                        owned={true}
+                        getEveryProjects={getEveryProjects}
+                      />
+                    ))}
+                <article
+                  className={styles.newProject}
+                  onClick={openNewProjectModal}
+                >
+                  <img
+                    src="/add-circle.svg"
+                    alt="add"
+                    className={styles.addIcon}
                   />
-                ))}
-            <article
-              className={styles.newProject}
-              onClick={openNewProjectModal}
-            >
-              <img src="/add-circle.svg" alt="add" className={styles.addIcon} />
-              <span>new project</span>
-            </article>
+                  <span>new project</span>
+                </article>
+              </>
+            )}
           </div>
         </section>
 

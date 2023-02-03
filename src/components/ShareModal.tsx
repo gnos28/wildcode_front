@@ -4,6 +4,7 @@ import {
   TextField,
   ToggleButton,
   ToggleButtonGroup,
+  Tooltip,
 } from "@mui/material";
 import React, {
   BaseSyntheticEvent,
@@ -144,15 +145,17 @@ const ShareModal = ({ closeShareModal }: ShareModalProps) => {
   return (
     <div className={modalStyles.modalBackground} onClick={closeShareModal}>
       <div className={modalStyles.modalContainer} onClick={handleModalClick}>
-        <h3>Partager le projet</h3>
+        <h3>Partager le projet [{project.name}]</h3>
         <div className={styles.flexRow}>
           <Switch
             checked={project.isPublic}
             onChange={togglePublic}
-            name="antoine"
+            name="public private swtich"
             defaultChecked
           />
-          <h4>Projet {project.isPublic ? "public" : "privé"}</h4>
+          <h4 onClick={togglePublic}>
+            Projet {project.isPublic ? "public" : "privé"}
+          </h4>
         </div>
         <div>
           <h4>Liste des partages</h4>
@@ -176,13 +179,19 @@ const ShareModal = ({ closeShareModal }: ShareModalProps) => {
                       aria-label="text alignment"
                     >
                       <ToggleButton value="read" aria-label="read">
-                        <VisibilityIcon />
+                        <Tooltip title="lecture" arrow>
+                          <VisibilityIcon />
+                        </Tooltip>
                       </ToggleButton>
                       <ToggleButton value="comment" aria-label="comment">
-                        <ChatBubbleOutlineIcon />
+                        <Tooltip title="commentaires" arrow>
+                          <ChatBubbleOutlineIcon />
+                        </Tooltip>
                       </ToggleButton>
                       <ToggleButton value="write" aria-label="write">
-                        <EditIcon />
+                        <Tooltip title="modification" arrow>
+                          <EditIcon />
+                        </Tooltip>
                       </ToggleButton>
                     </ToggleButtonGroup>
                   </td>
