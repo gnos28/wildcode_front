@@ -26,8 +26,13 @@ const Edit = () => {
     projectId: number
   ) => {
     if (usedFile) {
-      return await fileAPI.updateFileOnline(codeToPush, fileId, projectId);
+      try {
+        return await fileAPI.updateFileOnline(codeToPush, fileId, projectId);
+      } catch (e) {
+        return false;
+      }
     }
+    return false;
   };
 
   const updateCode = async (value: string) => {

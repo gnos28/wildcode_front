@@ -11,20 +11,20 @@ import { isLiked } from "../utils/isLiked";
 import { Avatar, Tooltip } from "@mui/material";
 import { userAPI } from "../api/userAPI";
 import ForceProjectListUpdateContext from "../contexts/forceProjectListUpdateContext";
+import { api } from "../api/_graphQL";
 
 const Header = () => {
-  const [isAuth, setIsAuth] = useState(false);
   const { project, setProject } = useContext(ProjectContext);
   const { user, setUser } = useContext(UserContext);
   const { setShareModal } = useContext(ShareModalContext);
   const { setForceProjectListUpdate } = useContext(
     ForceProjectListUpdateContext
   );
-  const client = useApolloClient();
+  // const client = useApolloClient();
   const navigate = useNavigate();
 
-  const token = localStorage.getItem("token");
-  const userId = localStorage.getItem("userId");
+  // const token = localStorage.getItem("token");
+  // const userId = localStorage.getItem("userId");
 
   const handleToggleModal = () => {
     const projectId = project.id;
@@ -85,40 +85,25 @@ const Header = () => {
     }
   };
 
-  const signOut = () => {
+  const signOut = async () => {
     localStorage.setItem("token", "");
     localStorage.setItem("userId", "");
     setUser({});
     setProject({});
     setForceProjectListUpdate(true);
 
-    client.resetStore();
     navigate("/login");
-    setIsAuth(false);
   };
 
-  useEffect(() => {
-    if (token) {
-      setIsAuth(true);
-    }
-  }, [token]);
-
-  useEffect(() => {
-    if (userId) {
-      setUser({ ...user, id: userId });
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [userId]);
-
   const updateUserContext = async () => {
-    const _userId = user.id;
+    const localStorageUserId = localStorage.getItem("userId");
 
-    if (user.login === undefined && _userId) {
+    if (user.login === undefined && localStorageUserId) {
       const reqUser = (await userAPI.getAll()).filter(
-        (u) => u.id === _userId.toString()
+        (u) => u.id === localStorageUserId
       )[0];
 
-      setUser({ ...reqUser, id: _userId.toString() });
+      setUser({ ...reqUser, id: localStorageUserId });
     }
   };
 

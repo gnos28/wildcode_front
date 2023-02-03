@@ -11,6 +11,7 @@ import { authAPI } from "../api/authAPI";
 import UserContext from "../contexts/userContext";
 import RegisterModal from "../components/RegisterModal";
 import { CreateUser } from "../interfaces/IUser";
+import { api } from "../api/_graphQL";
 
 const SignIn = () => {
   const [email, setEmail] = useState("");
@@ -32,6 +33,9 @@ const SignIn = () => {
     )[0];
 
     setUser({ ...user, id: userId.toString() });
+    await api.resetStore();
+    // eslint-disable-next-line no-restricted-globals
+    location.reload();
 
     navigate("/");
   };
@@ -81,7 +85,7 @@ const SignIn = () => {
     <>
       <div className={styles.connection}>
         <TextField
-          id="outlined-basic"
+          id="email_input"
           label="votre email"
           variant="outlined"
           sx={{
@@ -94,7 +98,7 @@ const SignIn = () => {
           autoFocus
         />
         <TextField
-          id="outlined-basic"
+          id="password_input"
           label="mot de passe"
           type="password"
           variant="outlined"
