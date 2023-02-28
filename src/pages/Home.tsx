@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import styles from "./Home.module.scss";
 import ProjectItem from "../components/ProjectItem";
 import { useNavigate } from "react-router-dom";
@@ -53,7 +53,10 @@ const Home = () => {
     if (list === "allProjects") setShowAllProjectList(!showAllProjectList);
   };
 
-  const handleSearch = (event: any, newValue: string | null) => {
+  const handleSearch = (
+    event: React.SyntheticEvent,
+    newValue: string | null
+  ) => {
     setSearchValue(newValue || undefined);
   };
 
@@ -69,8 +72,6 @@ const Home = () => {
 
   const getPublicProjects = async () => {
     const projects = await projectAPI.getPublic();
-
-    console.log("getPublicProjects", projects);
 
     setPublicProjects(projects);
   };
@@ -93,7 +94,7 @@ const Home = () => {
 
     const description = project.description.toLowerCase();
     const name = project.name.toLowerCase();
-    let rawLogin = project.userId?.login;
+    const rawLogin = project.userId?.login;
     let login: string | undefined = undefined;
     if (rawLogin) login = project.userId?.login.toLowerCase();
 
@@ -131,14 +132,12 @@ const Home = () => {
   });
 
   useEffect(() => {
-    getEveryProjects();
+    setForceProjectListUpdate(true);
     setProject({});
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
     if (forceProjectListUpdate === true) getEveryProjects();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [forceProjectListUpdate]);
 
   return (
@@ -183,26 +182,33 @@ const Home = () => {
           </h2>
 
           <div className={styles.projectsContainer}>
-            {showMyProjectList &&
-              myProjects &&
-              myProjects.length > 0 &&
-              myProjects
-                ?.filter(filterBySearch)
-                .map((project) => (
-                  <ProjectItem
-                    key={project.id}
-                    project={project}
-                    owned={true}
-                    getEveryProjects={getEveryProjects}
+            {showMyProjectList === true && (
+              <>
+                {myProjects &&
+                  myProjects.length > 0 &&
+                  myProjects
+                    ?.filter(filterBySearch)
+                    .map((project) => (
+                      <ProjectItem
+                        key={project.id}
+                        project={project}
+                        owned={true}
+                        getEveryProjects={getEveryProjects}
+                      />
+                    ))}
+                <article
+                  className={styles.newProject}
+                  onClick={openNewProjectModal}
+                >
+                  <img
+                    src="/add-circle.svg"
+                    alt="add"
+                    className={styles.addIcon}
                   />
-                ))}
-            <article
-              className={styles.newProject}
-              onClick={openNewProjectModal}
-            >
-              <img src="/add-circle.svg" alt="add" className={styles.addIcon} />
-              <span>new project</span>
-            </article>
+                  <span>new project</span>
+                </article>
+              </>
+            )}
           </div>
         </section>
 
