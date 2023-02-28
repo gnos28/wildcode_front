@@ -1,8 +1,7 @@
-import { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import styles from "./Header.module.scss";
 import ProjectContext from "../contexts/projectContext";
-import { useApolloClient } from "@apollo/client";
 import UserContext from "../contexts/userContext";
 import { projectAPI } from "../api/projectAPI";
 import { ILike } from "../interfaces/IProject";
@@ -11,7 +10,6 @@ import { isLiked } from "../utils/isLiked";
 import { Avatar, Tooltip } from "@mui/material";
 import { userAPI } from "../api/userAPI";
 import ForceProjectListUpdateContext from "../contexts/forceProjectListUpdateContext";
-import { api } from "../api/_graphQL";
 
 const Header = () => {
   const { project, setProject } = useContext(ProjectContext);
@@ -109,7 +107,6 @@ const Header = () => {
 
   useEffect(() => {
     updateUserContext();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
 
   return (
@@ -162,7 +159,7 @@ const Header = () => {
                   fontWeight: "bold",
                 }}
               >
-                {getInitialFromLogin(user.login)}
+                <div>{getInitialFromLogin(user.login)}</div>
               </Avatar>
             </Tooltip>
           </NavLink>

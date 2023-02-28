@@ -1,4 +1,4 @@
-import { BaseSyntheticEvent, useState } from "react";
+import React, { BaseSyntheticEvent, useState } from "react";
 import modalStyles from "../styles/modal.module.scss";
 import styles from "./RegisterModal.module.scss";
 import { Button, TextField } from "@mui/material";
