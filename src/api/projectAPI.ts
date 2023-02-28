@@ -213,7 +213,7 @@ export const projectAPI = {
   },
 
   addView: async (rawProjectId: number | string): Promise<number> => {
-    let projectId =
+    const projectId =
       typeof rawProjectId === "string" ? parseInt(rawProjectId) : rawProjectId;
 
     const updatedProject = (
@@ -235,7 +235,7 @@ export const projectAPI = {
   },
 
   addLike: async (rawProjectId: number | string): Promise<number> => {
-    let projectId =
+    const projectId =
       typeof rawProjectId === "string" ? parseInt(rawProjectId) : rawProjectId;
 
     const updatedProject = (
@@ -280,7 +280,7 @@ export const projectAPI = {
   },
 
   removeLike: async (rawProjectId: number | string): Promise<number> => {
-    let projectId =
+    const projectId =
       typeof rawProjectId === "string" ? parseInt(rawProjectId) : rawProjectId;
 
     const updatedProject = (
@@ -328,7 +328,7 @@ export const projectAPI = {
     rawProjectId: number | string,
     project: Partial<IProject>
   ): Promise<number> => {
-    let projectId =
+    const projectId =
       typeof rawProjectId === "string" ? parseInt(rawProjectId) : rawProjectId;
 
     const updatedProjectId = (
@@ -351,7 +351,7 @@ export const projectAPI = {
   },
 
   delete: async (rawProjectId: number | string): Promise<number> => {
-    let projectId =
+    const projectId =
       typeof rawProjectId === "string" ? parseInt(rawProjectId) : rawProjectId;
 
     const deletedProjectId = (

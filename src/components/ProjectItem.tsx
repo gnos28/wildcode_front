@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { IProject } from "../interfaces/IProject";
 import styles from "./ProjectItem.module.scss";
 import ProjectContext from "../contexts/projectContext";
-import { useContext } from "react";
+import React, { useContext } from "react";
 import { projectAPI } from "../api/projectAPI";
 import UserContext from "../contexts/userContext";
 import { isLiked } from "../utils/isLiked";

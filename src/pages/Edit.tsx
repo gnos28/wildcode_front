@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Editor from "../components/Editor";
 import Console from "../components/Console";
 import { executeCodeAPI, ExecutedCode } from "../api/executeCodeAPI";
@@ -61,7 +61,6 @@ const Edit = () => {
 
   useEffect(() => {
     getFilesInformations();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [project]);
 
   return (

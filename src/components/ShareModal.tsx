@@ -62,7 +62,10 @@ const ShareModal = ({ closeShareModal }: ShareModalProps) => {
     });
   };
 
-  const handleAddUser = async (event: any, newValue: string | null) => {
+  const handleAddUser = async (
+    event: React.SyntheticEvent,
+    newValue: string | null
+  ) => {
     if (newValue) {
       const projectId = project.id;
 
