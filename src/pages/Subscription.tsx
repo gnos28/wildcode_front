@@ -140,8 +140,8 @@ const Subscription = () => {
 
               setUser({
                 ...user,
-                date_start_subscription,
-                date_end_subscription,
+                date_start_subscription: new Date(date_start_subscription),
+                date_end_subscription: new Date(date_end_subscription),
               });
             }
             // eslint-disable-next-line @typescript-eslint/no-explicit-any

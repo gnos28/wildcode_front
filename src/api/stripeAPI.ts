@@ -6,8 +6,8 @@ type GetStripe = {
     | {
         success: boolean;
         message: string;
-        date_start_subscription: Date;
-        date_end_subscription: Date;
+        date_start_subscription: string;
+        date_end_subscription: string;
       }
     | undefined;
 };
