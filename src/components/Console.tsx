@@ -25,7 +25,8 @@ const Console = ({ consoleResult, nbExecutions }: ConsoleProps) => (
             <p className={styles.log}>
               <span>{`>\u00a0`}</span>
               <span>
-                to unlock execution limit, <a href="#">subscribe here</a> 🚀
+                to unlock execution limit,{" "}
+                <a href="/subscription">subscribe here</a> 🚀
               </span>
             </p>
           </>
