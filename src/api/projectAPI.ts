@@ -1,6 +1,7 @@
 import { api } from "./_graphQL";
 import { IProject, CreateProject } from "../interfaces/IProject";
 import { gql } from "@apollo/client";
+import { api as apiREST } from "./_REST";
 
 export const projectAPI = {
   create: async (project: Omit<CreateProject, "userId">): Promise<IProject> => {
@@ -387,5 +388,15 @@ export const projectAPI = {
     ).data.deleteProject;
 
     return deletedProjectId;
+  },
+
+  downloadProject: async (projectId: number) => {
+    try {
+      return await apiREST().get(`/download/${projectId}`, {
+        responseType: "blob",
+      });
+    } catch (err) {
+      console.error(err);
+    }
   },
 };

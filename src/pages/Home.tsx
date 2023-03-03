@@ -83,6 +83,8 @@ const Home = () => {
   };
 
   const getEveryProjects = async () => {
+    console.log("getEveryProjects");
+
     await getMyProjects();
     await getSharedProjects();
     await getPublicProjects();
@@ -126,17 +128,21 @@ const Home = () => {
   };
 
   useEffect(() => {
+    // console.log("useEffect");
     if (!token) {
       navigate("/login");
     }
   });
 
   useEffect(() => {
+    console.log("useEffect[]");
+
     setForceProjectListUpdate(true);
     setProject({});
   }, []);
 
   useEffect(() => {
+    console.log("useEffect[forceProjectListUpdate]");
     if (forceProjectListUpdate === true) getEveryProjects();
   }, [forceProjectListUpdate]);
 

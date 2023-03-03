@@ -15,5 +15,6 @@ ENV NODE_ENV=development
 RUN npm install --force
 COPY src /front/src
 COPY public /front/public
+COPY .env /front/.env
 COPY tsconfig.json /front/
 CMD ["react-scripts", "start"]

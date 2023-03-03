@@ -17,8 +17,11 @@ const Edit = () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [filesCodeArr, setFilesCodeArr] = useState<FilesCodeData[]>();
   const [usedFile, setUsedFile] = useState<FilesCodeData>();
-
+  const { project } = useContext(ProjectContext);
   const [editorCode, setEditorCode] = useState("");
+  const [nbExecutions, setNbExecutions] = useState<number | undefined>(
+    undefined
+  );
 
   const updateFileCodeOnline = async (
     codeToPush: string,
@@ -39,12 +42,19 @@ const Edit = () => {
     setEditorCode(value);
   };
 
-  const { project } = useContext(ProjectContext);
   const sendMonaco = async (code: string) => {
-    const { data, status } = await executeCodeAPI.sendCode(code);
+    const projectId = project.id;
 
-    if (status === 200 && data) {
-      setConsoleResult(data);
+    if (projectId) {
+      const { data, status } = await executeCodeAPI.sendCode(
+        code,
+        parseInt(projectId, 10)
+      );
+
+      if (status === 200 && data) {
+        setConsoleResult(data.result);
+        setNbExecutions(data.nbExecutions);
+      }
     }
   };
 
@@ -80,8 +90,7 @@ const Edit = () => {
       <div className={styles.resizeBar}>
         <img src="/grab.svg" alt="resize" draggable={false} />
       </div>
-      <Console consoleResult={consoleResult} />
-      {/* <CommentSection /> */}
+      <Console consoleResult={consoleResult} nbExecutions={nbExecutions} />
     </div>
   );
 };
