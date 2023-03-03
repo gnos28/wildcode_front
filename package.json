@@ -55,6 +55,7 @@
     "eslint-plugin-react": "^7.32.2",
     "jest": "^27.5.1",
     "jest-css-modules": "^2.1.0",
+    "js-file-download": "^0.4.12",
     "ts-jest": "^29.0.3"
   },
   "eslintConfig": {

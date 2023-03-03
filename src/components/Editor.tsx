@@ -1,8 +1,10 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, useContext } from "react";
 import styles from "./Editor.module.scss";
 import Editor, { Monaco, useMonaco } from "@monaco-editor/react";
 import * as monaco from "monaco-editor/esm/vs/editor/editor.api";
 import { updateRes } from "../api/fileAPI";
+import { projectAPI } from "../api/projectAPI";
+import ProjectContext from "../contexts/projectContext";
 
 type EditeurProps = {
   sendMonaco: (code: string) => Promise<void>;
@@ -17,10 +19,16 @@ type EditeurProps = {
   projectId: number;
 };
 
+type DownloadFile = {
+  status: number;
+  data: Blob;
+};
+
 type Theme = "light" | "vs-dark";
 
 const Editeur = (props: EditeurProps) => {
   const [theme, setTheme] = useState<Theme>("light");
+  const { project } = useContext(ProjectContext);
 
   // State Booléen pour savoir si le document est sauvegarder en ligne
   const [isSaveOnline, setIsSaveOnline] = useState(true);
@@ -54,6 +62,30 @@ const Editeur = (props: EditeurProps) => {
     }
   };
 
+  const sanitizeFileName = (fileName: string) =>
+    fileName.replace(/[^a-z0-9]/gi, "_").toLowerCase();
+
+  const downloadProject = async () => {
+    if (project.name === undefined) return;
+    const res = (await projectAPI.downloadProject(
+      props.projectId
+    )) as DownloadFile;
+    console.log(res);
+    const href = URL.createObjectURL(res.data);
+
+    // create "a" HTML element with href to file & click
+    const link = document.createElement("a");
+    link.href = href;
+
+    link.setAttribute("download", `${sanitizeFileName(project.name)}.zip`); //or any other extension
+    document.body.appendChild(link);
+    link.click();
+
+    // clean up "a" element & remove ObjectURL
+    document.body.removeChild(link);
+    URL.revokeObjectURL(href);
+  };
+
   useEffect(() => {
     // do conditional chaining
     monacoHook?.languages.typescript.javascriptDefaults.setEagerModelSync(true);
@@ -75,9 +107,17 @@ const Editeur = (props: EditeurProps) => {
           <img src="/start.svg" alt="execute code" draggable={false} />
         </button>
         <p>{isSaveOnline ? "Sauvegarde réussie" : "Non sauvegardé"}</p>
-        <button onClick={toggleTheme}>
-          {theme === "light" ? "light mode" : "dark mode"}
-        </button>
+        <div className={styles.rightPanel}>
+          <img
+            src="/download.png"
+            alt="project doawnload"
+            className={styles.imgBtn}
+            onClick={downloadProject}
+          />
+          <button onClick={toggleTheme} className={styles.themeBtn}>
+            {theme === "light" ? "light mode" : "dark mode"}
+          </button>
+        </div>
       </div>
 
       <div className={styles.resizable} id="resize">
