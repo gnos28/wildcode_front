@@ -55,8 +55,9 @@ const RegisterModal = ({ closeModal, registerNewUser }: RegisterModalProps) => {
     login: loginInscription,
   };
 
-  const verifySingleField = (field: Fields) => {
-    const status = getState[field] !== "" && !verif(field, getState);
+  const verifySingleField = (field: Fields, value?: string | undefined) => {
+    const fieldValue = value !== undefined ? value : getState[field];
+    const status = fieldValue !== "" && !verif(field, getState);
 
     setState[field](status);
   };
@@ -82,14 +83,15 @@ const RegisterModal = ({ closeModal, registerNewUser }: RegisterModalProps) => {
     e: BaseSyntheticEvent,
     fieldType: "email" | "password" | "login"
   ) => {
-    const field = e.target.value;
+    const value = e.target.value;
     const setState = {
       email: setEmailInscription,
       password: setPasswordInscription,
       login: setLoginInscription,
     };
 
-    setState[fieldType](field);
+    verifySingleField(fieldType, value);
+    setState[fieldType](value);
   };
 
   const handleModalClick = (e: BaseSyntheticEvent) => {
