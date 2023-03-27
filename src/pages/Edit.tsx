@@ -15,7 +15,7 @@ const Edit = () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [projectFiles, setProjectFiles] = useState<IFiles[]>();
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [filesCodeArr, setFilesCodeArr] = useState<FilesCodeData[]>();
+  const [fileCodeArr, setFilesCodeArr] = useState<FilesCodeData[]>();
   const [usedFile, setUsedFile] = useState<FilesCodeData>();
   const { project } = useContext(ProjectContext);
   const [editorCode, setEditorCode] = useState("");
