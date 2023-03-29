@@ -128,7 +128,8 @@ const Editeur = (props: EditeurProps) => {
             theme={theme}
             onMount={handleEditorDidMount}
             onChange={getMonacoText}
-            defaultValue={props.editorCode}
+            // defaultValue={props.editorCode}
+            value={props.editorCode}
           />
         ) : (
           <p>Test</p>

@@ -1,11 +1,13 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import Editor from "../components/Editor";
 import Console from "../components/Console";
 import { executeCodeAPI, ExecutedCode } from "../api/executeCodeAPI";
 import styles from "./Edit.module.scss";
 import ProjectContext from "../contexts/projectContext";
 import { fileAPI } from "../api/fileAPI";
+import { Socket } from "socket.io-client";
 import { IFiles, FilesCodeData } from "../interfaces/iFile";
+import { websocket } from "../api/websocket";
 
 const Edit = () => {
   const [consoleResult, setConsoleResult] = useState<
@@ -22,6 +24,26 @@ const Edit = () => {
   const [nbExecutions, setNbExecutions] = useState<number | undefined>(
     undefined
   );
+  const [forceEditorUpdate, setForceEditorUpdate] = useState(0);
+
+  const websockets = useRef<Socket[]>([]);
+
+  const websocketDisconnect = () => {
+    websockets.current.map((socket) => {
+      socket.close();
+    });
+  };
+
+  const websocketConnect = async () => {
+    websocketDisconnect();
+
+    websockets.current.push(
+      await websocket.connect(
+        { project_id: parseInt(project.id || "0") },
+        setForceEditorUpdate
+      )
+    );
+  };
 
   const updateFileCodeOnline = async (
     codeToPush: string,
@@ -65,12 +87,20 @@ const Edit = () => {
       setProjectFiles(req.getFilesByProjectId);
       setFilesCodeArr(req.getCodeFiles);
       setUsedFile(req.getCodeFiles[0]);
+
+      console.log(req.getCodeFiles[0].code);
       setEditorCode(req.getCodeFiles[0].code);
     }
   };
 
   useEffect(() => {
     getFilesInformations();
+  }, [forceEditorUpdate]);
+
+  useEffect(() => {
+    getFilesInformations();
+    websocketConnect();
+    return () => websocketDisconnect();
   }, [project]);
 
   return (
