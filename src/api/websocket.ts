@@ -38,7 +38,6 @@ export const websocket = {
           console.log("refresh cursor");
 
           setCoworkers(_arg);
-          // setForceCursorUpdate(new Date().getTime());
         });
 
         resolve(socket.id);
