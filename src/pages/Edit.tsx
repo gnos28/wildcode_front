@@ -8,6 +8,7 @@ import { fileAPI } from "../api/fileAPI";
 import { Socket } from "socket.io-client";
 import { IFiles, FilesCodeData } from "../interfaces/iFile";
 import { websocket } from "../api/websocket";
+import { Coworker } from "../api/coworkerAPI";
 
 const Edit = () => {
   const [consoleResult, setConsoleResult] = useState<
@@ -25,6 +26,7 @@ const Edit = () => {
     undefined
   );
   const [forceEditorUpdate, setForceEditorUpdate] = useState(0);
+  const [coworkers, setCoworkers] = useState<Coworker[]>([]);
 
   const websockets = useRef<Socket[]>([]);
 
@@ -40,7 +42,8 @@ const Edit = () => {
     websockets.current.push(
       await websocket.connect(
         { project_id: parseInt(project.id || "0") },
-        setForceEditorUpdate
+        setForceEditorUpdate,
+        setCoworkers
       )
     );
   };
@@ -108,11 +111,13 @@ const Edit = () => {
       {usedFile ? (
         <Editor
           sendMonaco={sendMonaco}
+          coworkers={coworkers}
           editorCode={editorCode}
           updateCode={updateCode}
           updateFileCodeOnline={updateFileCodeOnline}
           fileId={usedFile.id}
           projectId={usedFile?.projectId}
+          websockets={websockets}
         />
       ) : (
         <p>Loading Editor...</p>

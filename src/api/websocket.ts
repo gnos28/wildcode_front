@@ -1,5 +1,6 @@
 import { io } from "socket.io-client";
 import React from "react";
+import { Coworker } from "./coworkerAPI";
 
 const fromFrontUrl = "http://localhost:5001";
 
@@ -15,7 +16,8 @@ type Query = {
 export const websocket = {
   connect: async (
     query: Query,
-    setForceEditorUpdate: React.Dispatch<React.SetStateAction<number>>
+    setForceEditorUpdate: React.Dispatch<React.SetStateAction<number>>,
+    setCoworkers: React.Dispatch<React.SetStateAction<Coworker[]>>
   ) => {
     const socket = io(fromFrontUrl, {
       query,
@@ -30,6 +32,13 @@ export const websocket = {
           console.log("refresh editor");
 
           setForceEditorUpdate(new Date().getTime());
+        });
+
+        socket.on("refresh cursor", async (_arg: Coworker[]) => {
+          console.log("refresh cursor");
+
+          setCoworkers(_arg);
+          // setForceCursorUpdate(new Date().getTime());
         });
 
         resolve(socket.id);
