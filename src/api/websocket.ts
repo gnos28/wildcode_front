@@ -2,12 +2,10 @@ import { io } from "socket.io-client";
 import React from "react";
 import { Coworker } from "./coworkerAPI";
 
-const fromFrontUrl = "http://localhost:5001";
+let fromFrontUrl = "http://localhost:5001";
 
-// if (process.env.NEXT_PUBLIC_BACKEND_SOCKET_URL !== undefined)
-// fromFrontUrl = process.env.NEXT_PUBLIC_BACKEND_SOCKET_URL;
-
-// if (!fromFrontUrl.includes("http")) fromFrontUrl = "http://" + fromFrontUrl;
+if (process.env.REACT_APP_BACKEND_URL)
+  fromFrontUrl = process.env.REACT_APP_BACKEND_URL;
 
 type Query = {
   project_id: number;
