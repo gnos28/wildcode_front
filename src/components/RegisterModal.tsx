@@ -208,6 +208,7 @@ const RegisterModal = ({ closeModal, registerNewUser }: RegisterModalProps) => {
               onClick={verifyBeforeRegister}
               variant="contained"
               color="primary"
+              disabled={wrongLogin || wrongEmail || wrongPassword}
             >
               envoyer
             </Button>
