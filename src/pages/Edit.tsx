@@ -57,7 +57,14 @@ const Edit = () => {
   ) => {
     if (usedFile) {
       try {
-        return await fileAPI.updateFileOnline(codeToPush, fileId, projectId);
+        const socketIds = websockets.current.map((ws) => ws.id);
+
+        return await fileAPI.updateFileOnline(
+          codeToPush,
+          fileId,
+          projectId,
+          socketIds
+        );
       } catch (e) {
         return false;
       }
@@ -129,6 +136,7 @@ const Edit = () => {
           setRestoreCursor={setRestoreCursor}
           lockCursor={lockCursor}
           setLockCursor={setLockCursor}
+          forceEditorUpdate={forceEditorUpdate}
         />
       ) : (
         <p>Loading Editor...</p>

@@ -26,6 +26,7 @@ type EditeurProps = {
   setRestoreCursor: React.Dispatch<React.SetStateAction<boolean>>;
   lockCursor: boolean;
   setLockCursor: React.Dispatch<React.SetStateAction<boolean>>;
+  forceEditorUpdate: number;
 };
 
 type DownloadFile = {
@@ -103,6 +104,10 @@ const Editeur = (props: EditeurProps) => {
   };
 
   const getMonacoText = () => {
+    const now = new Date().getTime();
+
+    if (now - props.forceEditorUpdate < 500) return;
+
     isTyping.current = true;
     setIsSaveOnline(false);
     if (editorRef.current) {
