@@ -1,6 +1,6 @@
 import axios, { RawAxiosRequestHeaders } from "axios";
 
-let fromFrontUrl = "http://localhost:5000";
+let fromFrontUrl = "http://localhost:5500";
 
 if (process.env.REACT_APP_BACKEND_URL)
   fromFrontUrl = process.env.REACT_APP_BACKEND_URL;

@@ -9,7 +9,7 @@ services:
       - ./public:/front/public
     command: npm run start
     ports:
-      - "3000:3000"
+      - "3300:3000"
     networks:
       - dockerlan
     restart: always
